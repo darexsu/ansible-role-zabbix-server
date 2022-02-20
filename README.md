@@ -3,7 +3,7 @@
 [![CI Molecule](https://github.com/darexsu/ansible-role-zabbix-server/actions/workflows/ci.yml/badge.svg)](https://github.com/darexsu/ansible-role-zabbix-server/actions/workflows/ci.yml)&emsp;![](https://img.shields.io/static/v1?label=idempotence&message=ok&color=success)&emsp;![Ansible Role](https://img.shields.io/ansible/role/d/57603?color=blue&label=downloads)
 
 |  Testing         |  Debian            |  Ubuntu         |  Rocky Linux  | Oracle Linux |
-| ---------------- | ------------------ | --------------- | ------------- | ------------ |
+| :--------------: | :----------------: | :-------------: | :-----------: | :----------: |
 | Distro version   |  10, 11            | 18.04, 20.04    |  8            | 8            |
 | Zabbix version   |  6.0 LTS           |   6.0 LTS       |    6.0 LTS    |  6.0 LTS     |             
                                           
