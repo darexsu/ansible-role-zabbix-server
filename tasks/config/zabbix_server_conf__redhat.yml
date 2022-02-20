@@ -1,0 +1,33 @@
+---
+- name: configure zabbix_server.conf
+  ansible.builtin.template:
+    src: "{{ zabbix_server_conf.src }}"
+    dest: "{{ zabbix_server_conf.path.redhat }}{{ zabbix_server_conf.file }}"
+    owner: root
+    group: root
+    mode: 0600
+    backup: "{{ zabbix_server_conf.backup }}"
+  notify: restart zabbix-server
+  when: zabbix_server_conf.enabled
+
+- name: ensure web-server user exsist
+  block:
+    - name: ensure web-server group exsist
+      ansible.builtin.group:
+        name: "{{ php_fpm.vars.webserver_group }}"
+
+    - name: ensure web-server user exsist
+      ansible.builtin.user:
+        name: "{{ php_fpm.vars.webserver_user }}"
+        group: "{{ php_fpm.vars.webserver_group }}"
+
+- name: configure zabbix_server_gui
+  ansible.builtin.template:
+    src: "{{ zabbix_server_gui.src }}"
+    dest: "{{ zabbix_server_gui.path.redhat }}{{ zabbix_server_gui.file }}"
+    owner: "{{ php_fpm.vars.webserver_user }}"
+    group: "{{ php_fpm.vars.webserver_group }}"
+    mode: 0600
+    backup: "{{ zabbix_server_gui.backup }}"
+  notify: restart zabbix-server
+  when: zabbix_server_gui.enabled

@@ -1,0 +1,328 @@
+---
+# zabbix_server
+#   |   ├── install
+#   |   |    ├── repo
+#   |   |    ├── packages
+#   |   |    └── dependencies
+#   |   └── config
+#   |        └── server.cnf
+# mariadb
+#   |   ├── install
+#   |   └── actions
+#   |        ├── create database
+#   |        ├── create user
+#   |        └── import server.sql
+# php {version} 
+#   |   ├── install
+#   |   |    ├── packages
+#   |   |    ├── repo
+#   |   |    └── dependencies
+#   |   └── config
+#   |        └── php.ini
+#   |        └── php-fpm
+#   |              ├── tcp\ip socket
+#   |              └── unix socket
+# nginx
+#   ├── install
+#   |    ├── packages
+#   |    ├── dependencies
+#   |    └── repositories
+#   └── config
+#        ├── nginx.conf
+#        └── virtualhost.conf
+#              ├── tcp\ip socket
+#              └── unix socket
+
+# zabbix_server -> global
+zabbix_server:
+  enabled: false
+  version: "6.0"
+  server_name: "Zabbix server"  
+  db_type: "MYSQL"
+  db_port: "3306"
+  db_name: "zabbix"
+  db_user: "zabbix"
+  db_password: "change_me"
+  service:
+    state: "started"
+    enabled: true
+
+# zabbix_server -> repo
+zabbix_server_repo:
+  enabled: true
+  zabbix:
+    deb: "deb http://repo.zabbix.com/zabbix/{{ zabbix_server.version }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} main"
+    deb_key: "http://repo.zabbix.com/zabbix-official-repo.key"
+    rpm: "http://repo.zabbix.com/zabbix/{{ zabbix_server.version }}/rhel/{{ ansible_distribution_major_version }}/x86_64/zabbix-release-{{ zabbix_server.version }}-1.el{{ ansible_distribution_major_version }}.noarch.rpm"
+    rpm_key: "http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591"
+
+# zabbix_server -> install
+zabbix_server_install:
+  enabled: false
+  packages:
+    debian: [zabbix-server-mysql, zabbix-frontend-php, zabbix-sql-scripts, zabbix-agent]
+    redhat: [zabbix-server-mysql, zabbix-web-mysql, zabbix-sql-scripts, zabbix-agent]
+  dependencies:
+    debian: [apt-transport-https, ca-certificates, gnupg2, lsb-release]
+    redhat: []
+
+# zabbix_server -> config
+zabbix_server_conf:
+  enabled: false
+  file: "zabbix_server.conf"
+  src: "zabbix_server_conf.j2"
+  path:
+    debian: "/etc/zabbix/"
+    redhat: "/etc/zabbix/"
+  backup: false
+  vars:
+    ListenPort: "10051"
+    SourceIP: ""
+    LogType: ""
+    LogFile: "/var/log/zabbix/zabbix_server.log"
+    LogFileSize: "0"
+    DebugLevel: ""
+    PidFile: "/var/run/zabbix/zabbix_server.pid"
+    SocketDir: "/var/run/zabbix"
+    DBHost: ""
+    DBName: "{{ zabbix_server.db_name }}"
+    DBSchema: ""
+    DBUser: "{{ zabbix_server.db_user }}"
+    DBPassword: "{{ zabbix_server.db_password }}"
+    DBSocket: ""
+    DBPort: "{{ zabbix_server.db_port }}"
+    HistoryStorageURL: ""
+    HistoryStorageTypes: ""
+    HistoryStorageDateIndex: ""
+    ExportDir: ""
+    ExportFileSize: ""
+    ExportType: ""
+    StartPollers: ""
+    StartIPMIPollers: ""
+    StartPreprocessors: ""
+    StartPollersUnreachable: ""
+    StartTrappers: ""
+    StartPingers: ""
+    StartDiscoverers: ""
+    StartHTTPPollers: ""
+    StartTimers: ""
+    StartEscalators: ""
+    StartAlerters: ""
+    JavaGateway: ""
+    JavaGatewayPort: ""
+    StartJavaPollers: ""
+    StartVMwareCollectors: ""
+    VMwareFrequency: ""
+    VMwarePerfFrequency: ""
+    VMwareCacheSize: ""
+    VMwareTimeout: ""
+    SNMPTrapperFile: "/var/log/snmptrap/snmptrap.log"
+    StartSNMPTrapper: ""
+    ListenIP: ""
+    HousekeepingFrequency: ""
+    MaxHousekeeperDelete: ""
+    CacheSize: ""
+    CacheUpdateFrequency: "60"
+    StartDBSyncers: ""
+    HistoryCacheSize: ""
+    HistoryIndexCacheSize: ""
+    TrendCacheSize: ""
+    ValueCacheSize: ""
+    Timeout: "4"
+    TrapperTimeout: ""
+    UnreachablePeriod: ""
+    UnavailableDelay: ""
+    UnreachableDelay: ""
+    AlertScriptsPath: "/usr/lib/zabbix/alertscripts"
+    ExternalScripts: "/usr/lib/zabbix/externalscripts"
+    FpingLocation: "/usr/bin/fping"
+    Fping6Location: "/usr/bin/fping6"
+    SSHKeyLocation: ""
+    LogSlowQueries: "3000"
+    TmpDir: ""
+    StartProxyPollers: ""
+    ProxyConfigFrequency: ""
+    ProxyDataFrequency: ""
+    StartLLDProcessors: ""
+    AllowRoot: ""
+    User: ""
+    Include: ""
+    SSLCertLocation: ""
+    SSLKeyLocation: ""
+    SSLCALocation: ""
+    StatsAllowedIP: "127.0.0.1"
+    LoadModulePath: ""
+    LoadModule: ""
+    TLSCAFile: ""
+    TLSCRLFile: ""
+    TLSCertFile: ""
+    TLSKeyFile: ""
+    TLSCipherCert13: ""
+    TLSCipherCert: ""
+    TLSCipherPSK13: ""
+    TLSCipherPSK: ""
+    TLSCipherAll13: ""
+    TLSCipherAll: ""
+    DBTLSConnect: ""
+    DBTLSCAFile: ""
+    DBTLSCertFile: ""
+    DBTLSKeyFile: ""
+    DBTLSCipher: ""
+    DBTLSCipher13: ""
+    ListenBacklog: ""
+
+# zabbix_server -> config -> gui
+zabbix_server_gui:
+  enabled: false
+  file: "zabbix.conf.php"
+  src: "zabbix_server_gui.j2"
+  path:
+    debian: "/etc/zabbix/web/"
+    redhat: "/etc/zabbix/web/"
+  backup: false
+  vars:
+    db_type: "{{ zabbix_server.db_type }}"
+    db_server: "localhost"
+    db_port: "{{ zabbix_server.db_port }}"
+    db_database: "{{ zabbix_server.db_name }}"
+    db_user: "{{ zabbix_server.db_user }}"
+    db_password: "{{ zabbix_server.db_password }}"
+    db_schema: ""
+    db_encryption: "false"
+    db_key_file: ""
+    db_cert_file: ""
+    db_ca_file: ""
+    db_verify_host: "false"
+    db_sypher_list: ""
+    db_vault_url: ""
+    db_vault_db_path: ""
+    db_vault_token: ""
+    db_double_ieee754: "true"
+    zbx_server_name: "{{ zabbix_server.server_name }}"
+    image_format_default: "IMAGE_FORMAT_PNG"
+
+# mariadb -> global
+mariadb:
+  enabled: false
+  version: "10.6"
+
+# repo
+mariadb_repo:
+  enabled: true
+
+# mariadb -> install
+mariadb_install:
+  enabled: false
+
+# mariadb -> database
+mariadb_database:
+  zabbix_server:
+    enabled: false
+    remove_old: false
+    login_user: "root"
+    login_password: ""
+    login_host: "localhost"
+    login_port: "{{ zabbix_server.db_port }}"
+    login_unix_socket: 
+      debian: "/run/mysqld/mysqld.sock"
+      redhat: "/var/lib/mysql/mysql.sock"
+    name: "{{ zabbix_server.db_name }}"
+    state: "present"
+    target: ""
+    encoding: "utf8"
+    collation: "utf8_bin"
+    
+
+# mariadb -> user
+mariadb_user:
+  zabbix_server:
+    enabled: false
+    login_user: "root"
+    login_password: ""
+    login_host: "localhost"
+    login_port: "{{ zabbix_server.db_port }}"
+    login_unix_socket: 
+      debian: "/run/mysqld/mysqld.sock"
+      redhat: "/var/lib/mysql/mysql.sock"
+    name: "{{ zabbix_server.db_user }}"
+    password: "{{ zabbix_server.db_password }}"
+    state: "present"    
+    privileges: 'zabbix.*:ALL'
+    encrypted: false
+
+# mariadb -> sql
+mariadb_sql:
+  zabbix_server:
+    schema: false
+
+# php -> global
+php:
+  version: "7.4"
+
+# php -> repo 
+php_repo:
+  enabled: false
+
+# php -> install
+php_install:
+  enabled: false
+  packages: [bcmath, ctype, common, fpm, cli, gd, ldap, curl, xml, xmlrpc, mbstring, mysql, zip]
+
+# php -> config -> php-fpm
+php_fpm: 
+  enabled: false
+  file: "zabbix.conf"
+  state: "present"
+  src: "../../darexsu.zabbix_server/templates/zabbix_server_php.j2"
+  backup: false
+  remove_default: true
+  vars:
+    webserver_user: "www-data"
+    webserver_group: "www-data"
+    pm: "dynamic"
+    pm_max_children: "50"
+    pm_start_servers: "5"
+    pm_min_spare_servers: "5"
+    pm_max_spare_servers: "35"
+    date_timezone: "Europe/Moscow" 
+    unix_socket:
+      enabled: true
+      file: "php{{ php.version }}-fpm-zabbix.sock"
+      user: "www-data"
+      group: "www-data"
+
+# nginx -> global
+nginx:
+  enabled: false
+
+# nginx -> repo
+nginx_repo:
+  enabled: false
+
+# nginx -> install
+mariadb_install:
+  enabled: false
+  remove_old:
+    enabled: false
+  
+# nginx -> config -> nginx.conf
+nginx_conf:
+  enabled: false
+
+# Config -> config -> {virtualhost}.conf
+nginx_virtualhost: 
+  enabled: false
+  file: "zabbix_server.conf"
+  state: "present"
+  src: "../../darexsu.zabbix_server/templates/zabbix_server_nginx.j2"
+  backup: false
+  remove_default: true
+  vars:
+    listen_port: "80"
+    listen_ipv6: false
+    server_name: "localhost"
+    root: "/usr/share/zabbix/"
+    php_fpm:
+      unix_socket:
+        enabled: true
+        file: "php{{ php.version }}-fpm-zabbix.sock"
