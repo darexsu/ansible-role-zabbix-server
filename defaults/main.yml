@@ -213,6 +213,8 @@ mariadb_repo:
 # mariadb -> install
 mariadb_install:
   enabled: false
+  remove_old:
+    enabled: false
 
 # mariadb -> database
 mariadb_database:
@@ -230,8 +232,7 @@ mariadb_database:
     state: "present"
     target: ""
     encoding: "utf8"
-    collation: "utf8_bin"
-    
+    collation: "utf8_bin"    
 
 # mariadb -> user
 mariadb_user:
@@ -300,10 +301,8 @@ nginx_repo:
   enabled: false
 
 # nginx -> install
-mariadb_install:
-  enabled: false
-  remove_old:
-    enabled: false
+nginx_install:
+  enabled: true
   
 # nginx -> config -> nginx.conf
 nginx_conf:
