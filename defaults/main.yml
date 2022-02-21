@@ -41,8 +41,8 @@ zabbix_server_repo:
 zabbix_server_install:
   enabled: false
   packages:
-    debian: [zabbix-server-mysql, zabbix-frontend-php, zabbix-sql-scripts, zabbix-agent]
-    redhat: [zabbix-server-mysql, zabbix-web-mysql, zabbix-sql-scripts, zabbix-agent]
+    debian: [zabbix-server-mysql, zabbix-sql-scripts]
+    redhat: [zabbix-server-mysql, zabbix-sql-scripts]
   dependencies:
     debian: [apt-transport-https, ca-certificates, gnupg2, lsb-release]
     redhat: []

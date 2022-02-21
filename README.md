@@ -66,8 +66,6 @@ Role recursive merge:
         enabled: true
       zabbix_server_conf:
         enabled: true
-      zabbix_server_gui:
-        enabled: true
 # MariaDB ---------
       mariadb:
         enabled: true
@@ -119,8 +117,6 @@ Role recursive merge:
         enabled: true
       zabbix_server_conf:
         enabled: true
-      zabbix_server_gui:
-        enabled: true
 
   tasks:
   - name: include role darexsu.zabbix_server
@@ -151,8 +147,6 @@ Role recursive merge:
       zabbix_server_repo:
         enabled: true
       zabbix_server_conf:
-        enabled: true
-      zabbix_server_gui:
         enabled: true
  # MariaDB ---------
       mariadb:

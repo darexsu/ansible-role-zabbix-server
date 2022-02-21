@@ -1,6 +1,7 @@
 ---
 - name: Converge
   hosts: all 
+  become: true
 
   vars:
     merge:
@@ -19,8 +20,6 @@
       zabbix_server_repo:
         enabled: true
       zabbix_server_conf:
-        enabled: true
-      zabbix_server_gui:
         enabled: true
 # MariaDB -------------     
       mariadb:
