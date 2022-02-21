@@ -8,8 +8,8 @@
 | Zabbix version   |  6.0 LTS           |   6.0 LTS       |    6.0 LTS    |  6.0 LTS     |             
                                           
 ### Zabbix Roles:
-[Zabbix-server role](https://github.com/darexsu/ansible-role-zabbix-server/)
 [Zabbix-agent role](https://github.com/darexsu/ansible-role-zabbix-agent/)
+
 [Zabbix-GUI role](https://github.com/darexsu/ansible-role-zabbix-gui/)                                          
 
 ### 1) Install role from Galaxy
