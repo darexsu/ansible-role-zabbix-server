@@ -1,6 +1,2 @@
 ---
 - name: darexsu.mariadb
-
-- name: darexsu.php
-
-- name: darexsu.nginx

@@ -33,14 +33,6 @@
   include_tasks: ./tasks/mariadb/zabbix_server_mariadb__{{ ansible_os_family | lower }}.yml
   when: mariadb.enabled
 
-- name: include php tasks
-  include_tasks: ./tasks/php/zabbix_server_php.yml
-  when: php.enabled
-    
-- name: include nginx tasks
-  include_tasks: ./tasks/nginx/zabbix_server_nginx.yml
-  when: nginx.enabled
-
 - name: zabbix-server service
   ansible.builtin.service:
     name: zabbix-server

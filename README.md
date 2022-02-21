@@ -4,9 +4,13 @@
 
 |  Testing         |  Debian            |  Ubuntu         |  Rocky Linux  | Oracle Linux |
 | :--------------: | :----------------: | :-------------: | :-----------: | :----------: |
-| Distro version   |  10, 11            | 18.04, 20.04    |  8            | 8            |
+| Distro release   |  10, 11            | 18.04, 20.04    |       8       |      8       |
 | Zabbix version   |  6.0 LTS           |   6.0 LTS       |    6.0 LTS    |  6.0 LTS     |             
                                           
+### Zabbix Roles:
+[Zabbix-server role](https://github.com/darexsu/ansible-role-zabbix-server/)
+[Zabbix-agent role](https://github.com/darexsu/ansible-role-zabbix-agent/)
+[Zabbix-GUI role](https://github.com/darexsu/ansible-role-zabbix-gui/)                                          
 
 ### 1) Install role from Galaxy
 ```
@@ -14,11 +18,10 @@ ansible-galaxy install darexsu.nginx --force
 ```
 ### 2) Example playbooks: 
   
-  - [full playbook (Zabbix-server, MariaDB, PHP, Nginx)](#full-playbook-zabbix-server-mariadb-php-nginx)  
+  - [full playbook Zabbix-server, MariaDB](#full-playbook-zabbix-server-mariadb-php-nginx)  
     - install
       - [zabbix-server](#install-zabbix-server)
-      - [install Zabbix-GUI](#install-zabbix-gui)
-      - [(Zabbix-server, MariaDB, PHP, Nginx) from distro repo](#install-zabbix-gui) 
+      - [Zabbix-server, MariaDB, from distro repo](#install-zabbix-gui) 
     - config
       - [zabbix_server.conf](#configure-zabbix-server-conf)
 
@@ -50,7 +53,8 @@ Role recursive merge:
 
   vars:
     merge:
-      zabbix_server:                   # Zabbix-server ---
+# Zabbix-server --- 
+      zabbix_server:
         enabled: true
         version: "6.0"
         server_name: "Zabbix server"  
@@ -67,7 +71,8 @@ Role recursive merge:
         enabled: true
       zabbix_server_gui:
         enabled: true
-      mariadb:                          # MariaDB ---------
+# MariaDB ---------
+      mariadb:
         enabled: true
         version: "10.5"
       mariadb_repo:
@@ -84,30 +89,6 @@ Role recursive merge:
       mariadb_sql:
         zabbix_server:
           schema: true
-      php:                              # PHP ------------
-        enabled: true
-        version: "7.4"
-      php_repo:
-        enabled: true
-      php_install:
-        enabled: true
-      php_fpm: 
-        enabled: true
-        vars:
-          date_timezone: "Europe/Moscow" 
-          unix_socket:
-            enabled: true
-      nginx:                            # Nginx ------------
-        enabled: true
-      nginx_repo:
-        enabled: true
-      nginx_install:
-        enabled: true
-      nginx_conf:
-        enabled: true
-      nginx_virtualhost: 
-        enabled: true
-
 
   tasks:
   - name: include role darexsu.zabbix_server
@@ -125,7 +106,8 @@ Role recursive merge:
 
   vars:
     merge:
-      zabbix_server:                   # Zabbix-server ---
+# Zabbix-server ----
+      zabbix_server:
         enabled: true
         version: "6.0"
         server_name: "Zabbix server"  
@@ -142,45 +124,6 @@ Role recursive merge:
         enabled: true
       zabbix_server_gui:
         enabled: true
-
-  tasks:
-  - name: include role darexsu.zabbix_server
-    include_role: 
-      name: darexsu.zabbix_server
-
-```
-##### Install Zabbix-GUI
-
-```yaml
-- name: Converge
-  hosts: all
-  become: true
-
-  vars:
-    merge:
-      zabbix_server:                   # Zabbix-server 
-        enabled: true
-        version: "6.0"
-        server_name: "Zabbix server"  
-        db_type: "MYSQL"
-        db_port: "3306"
-        db_name: "zabbix"
-        db_user: "zabbix"
-        db_password: "change_me"
-      zabbix_server_install:
-        enabled: true
-      zabbix_server_repo:
-        enabled: true
-      zabbix_server_gui:              # Zabbix_server GUI
-        enabled: true
-        file: "zabbix.conf.php"
-        vars:
-          db_type: "{{ zabbix_server.db_type }}"
-          db_server: "localhost"
-          db_port: "{{ zabbix_server.db_port }}"
-          db_database: "{{ zabbix_server.db_name }}"
-          db_user: "{{ zabbix_server.db_user }}"
-          db_password: "{{ zabbix_server.db_password }}"
 
   tasks:
   - name: include role darexsu.zabbix_server
@@ -196,7 +139,8 @@ Role recursive merge:
 
   vars:
     merge:
-      zabbix_server:                   # Zabbix-server ---
+# Zabbix-server ----
+      zabbix_server:
         enabled: true
         version: "6.0"
         server_name: "Zabbix server"  
@@ -213,11 +157,12 @@ Role recursive merge:
         enabled: true
       zabbix_server_gui:
         enabled: true
-      mariadb:                          # MariaDB ---------
+ # MariaDB ---------
+      mariadb:
         enabled: true
         version: "10.5"
       mariadb_repo:
-        enabled: false                    # <-- disable third-party repo
+        enabled: false             # <-- disable third-party repo
       mariadb_install:
         enabled: true
       mariadb_database:
@@ -230,30 +175,6 @@ Role recursive merge:
       mariadb_sql:
         zabbix_server:
           schema: true
-      php:                              # PHP ------------
-        enabled: true
-        version: "7.4"
-      php_repo:
-        enabled: false                    # <-- disable third-party repo
-      php_install:
-        enabled: true
-      php_fpm: 
-        enabled: true
-        vars:
-          date_timezone: "Europe/Moscow" 
-          unix_socket:
-            enabled: true
-      nginx:                            # Nginx ------------
-        enabled: true
-      nginx_repo:
-        enabled: false                    # <-- disable third-party repo
-      nginx_install:
-        enabled: true
-      nginx_conf:
-        enabled: true
-      nginx_virtualhost: 
-        enabled: true
-
 
   tasks:
   - name: include role darexsu.zabbix_server
@@ -269,7 +190,8 @@ Role recursive merge:
 
   vars:
     merge:
-      zabbix_server:                   # Zabbix-server ---
+# Zabbix-server -----
+      zabbix_server:                   
         enabled: true
       zabbix_server_conf:
         enabled: true

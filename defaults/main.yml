@@ -12,26 +12,6 @@
 #   |        ├── create database
 #   |        ├── create user
 #   |        └── import server.sql
-# php {version} 
-#   |   ├── install
-#   |   |    ├── packages
-#   |   |    ├── repo
-#   |   |    └── dependencies
-#   |   └── config
-#   |        └── php.ini
-#   |        └── php-fpm
-#   |              ├── tcp\ip socket
-#   |              └── unix socket
-# nginx
-#   ├── install
-#   |    ├── packages
-#   |    ├── dependencies
-#   |    └── repositories
-#   └── config
-#        ├── nginx.conf
-#        └── virtualhost.conf
-#              ├── tcp\ip socket
-#              └── unix socket
 
 # zabbix_server -> global
 zabbix_server:
@@ -40,6 +20,7 @@ zabbix_server:
   server_name: "Zabbix server"  
   db_type: "MYSQL"
   db_port: "3306"
+  db_host: "localhost"
   db_name: "zabbix"
   db_user: "zabbix"
   db_password: "change_me"
@@ -84,7 +65,7 @@ zabbix_server_conf:
     DebugLevel: ""
     PidFile: "/var/run/zabbix/zabbix_server.pid"
     SocketDir: "/var/run/zabbix"
-    DBHost: ""
+    DBHost: "{{ zabbix_server.db_host }}"
     DBName: "{{ zabbix_server.db_name }}"
     DBSchema: ""
     DBUser: "{{ zabbix_server.db_user }}"
@@ -171,36 +152,6 @@ zabbix_server_conf:
     DBTLSCipher13: ""
     ListenBacklog: ""
 
-# zabbix_server -> config -> gui
-zabbix_server_gui:
-  enabled: false
-  file: "zabbix.conf.php"
-  src: "zabbix_server_gui.j2"
-  path:
-    debian: "/etc/zabbix/web/"
-    redhat: "/etc/zabbix/web/"
-  backup: false
-  vars:
-    db_type: "{{ zabbix_server.db_type }}"
-    db_server: "localhost"
-    db_port: "{{ zabbix_server.db_port }}"
-    db_database: "{{ zabbix_server.db_name }}"
-    db_user: "{{ zabbix_server.db_user }}"
-    db_password: "{{ zabbix_server.db_password }}"
-    db_schema: ""
-    db_encryption: "false"
-    db_key_file: ""
-    db_cert_file: ""
-    db_ca_file: ""
-    db_verify_host: "false"
-    db_sypher_list: ""
-    db_vault_url: ""
-    db_vault_db_path: ""
-    db_vault_token: ""
-    db_double_ieee754: "true"
-    zbx_server_name: "{{ zabbix_server.server_name }}"
-    image_format_default: "IMAGE_FORMAT_PNG"
-
 # mariadb -> global
 mariadb:
   enabled: false
@@ -255,73 +206,3 @@ mariadb_user:
 mariadb_sql:
   zabbix_server:
     schema: false
-
-# php -> global
-php:
-  version: "7.4"
-
-# php -> repo 
-php_repo:
-  enabled: false
-
-# php -> install
-php_install:
-  enabled: false
-  packages: [bcmath, ctype, common, fpm, cli, gd, ldap, curl, xml, xmlrpc, mbstring, mysql, zip]
-
-# php -> config -> php-fpm
-php_fpm: 
-  enabled: false
-  file: "zabbix.conf"
-  state: "present"
-  src: "../../darexsu.zabbix_server/templates/zabbix_server_php.j2"
-  backup: false
-  remove_default: true
-  vars:
-    webserver_user: "www-data"
-    webserver_group: "www-data"
-    pm: "dynamic"
-    pm_max_children: "50"
-    pm_start_servers: "5"
-    pm_min_spare_servers: "5"
-    pm_max_spare_servers: "35"
-    date_timezone: "Europe/Moscow" 
-    unix_socket:
-      enabled: true
-      file: "php{{ php.version }}-fpm-zabbix.sock"
-      user: "www-data"
-      group: "www-data"
-
-# nginx -> global
-nginx:
-  enabled: false
-
-# nginx -> repo
-nginx_repo:
-  enabled: false
-
-# nginx -> install
-nginx_install:
-  enabled: true
-  
-# nginx -> config -> nginx.conf
-nginx_conf:
-  enabled: false
-
-# Config -> config -> {virtualhost}.conf
-nginx_virtualhost: 
-  enabled: false
-  file: "zabbix_server.conf"
-  state: "present"
-  src: "../../darexsu.zabbix_server/templates/zabbix_server_nginx.j2"
-  backup: false
-  remove_default: true
-  vars:
-    listen_port: "80"
-    listen_ipv6: false
-    server_name: "localhost"
-    root: "/usr/share/zabbix/"
-    php_fpm:
-      unix_socket:
-        enabled: true
-        file: "php{{ php.version }}-fpm-zabbix.sock"
