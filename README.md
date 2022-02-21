@@ -15,10 +15,10 @@ ansible-galaxy install darexsu.nginx --force
 ```
 ### 2) Example playbooks: 
   
-  - [full playbook Zabbix-server, MariaDB](#full-playbook-zabbix-server-mariadb-php-nginx)  
+  - [full playbook Zabbix-server, MariaDB](#full-playbook-zabbix-server-mariadb)  
     - install
       - [zabbix-server](#install-zabbix-server)
-      - [Zabbix-server, MariaDB, from distro repo](#install-zabbix-gui) 
+      - [Zabbix-server, MariaDB, from distro repo](#install-zabbix-server-mariadb-from-distro-repo) 
     - config
       - [zabbix_server.conf](#configure-zabbix-server-conf)
 
@@ -42,7 +42,7 @@ Role recursive merge:
                                       c: "3"
     
 ```
-##### Full playbook (Zabbix-server, MariaDB, PHP, Nginx)
+##### Full playbook Zabbix-server, MariaDB
 ```yaml
 - name: Converge
   hosts: all
@@ -128,7 +128,7 @@ Role recursive merge:
       name: darexsu.zabbix_server
 
 ```
-##### Zabbix-server from distro
+##### Install zabbix-server, MariaDB from distro repo
 ```yaml
 - name: Converge
   hosts: all

@@ -7,11 +7,11 @@
 #   |   └── config
 #   |        └── server.cnf
 # mariadb
-#   |   ├── install
-#   |   └── actions
-#   |        ├── create database
-#   |        ├── create user
-#   |        └── import server.sql
+#       ├── install
+#       └── actions
+#            ├── create database
+#            ├── create user
+#            └── import server.sql
 
 # zabbix_server -> global
 zabbix_server:
