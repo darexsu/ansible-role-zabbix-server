@@ -20,7 +20,7 @@ ansible-galaxy install darexsu.nginx --force
       - [zabbix-server](#install-zabbix-server)
       - [Zabbix-server, MariaDB, from distro repo](#install-zabbix-server-mariadb-from-distro-repo) 
     - config
-      - [zabbix_server.conf](#configure-zabbix-server-conf)
+      - [zabbix_server.conf](#configure-zabbix-serverconf)
 
 Replace dictionary and Merge dictionary (with "hash_behaviour=replace" in ansible.cfg):
 ```
