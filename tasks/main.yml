@@ -1,12 +1,12 @@
---- 
+---
 - name: merge dictionaries
   block:
   - name: register default vars
-    include_vars: 
+    include_vars:
       file: ../../darexsu.zabbix_server/defaults/main.yml
       name: zabbix_server_default_vars
-  
-  - name: merge default and new dictionaries 
+
+  - name: merge default and new dictionaries
     set_fact:
       "{{ item.key }}": "{{ zabbix_server_default_vars[item.key] | combine(merge[item.key], recursive=True)}}"
     when: zabbix_server_default_vars[item.key] is defined
@@ -22,16 +22,20 @@
   when: not zabbix_server.enabled
 
 - name: include zabbix_server install
-  include_tasks: ./tasks/install/zabbix_server_install__{{ ansible_os_family | lower }}.yml
+  include_tasks: ./tasks/zabbix_server/install/zabbix_server__install_{{ ansible_os_family }}.yml
   when: zabbix_server_install.enabled
 
 - name: include zabbix_server config
-  include_tasks: ./tasks/config/zabbix_server_conf__{{ ansible_os_family | lower }}.yml
+  include_tasks: ./tasks/zabbix_server/config/zabbix_server__conf.yml
   when: zabbix_server_conf.enabled
 
 - name: include mariadb tasks
-  include_tasks: ./tasks/mariadb/zabbix_server_mariadb__{{ ansible_os_family | lower }}.yml
+  include_tasks: ./tasks/mariadb/zabbix_server__mariadb.yml
   when: mariadb.enabled
+
+- name: include mysql tasks
+  include_tasks: ./tasks/mysql/zabbix_server__mysql.yml
+  when: mysql.enabled
 
 - name: zabbix-server service
   ansible.builtin.service:

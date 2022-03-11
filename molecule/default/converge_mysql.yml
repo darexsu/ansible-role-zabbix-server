@@ -65,22 +65,34 @@
           Fping6Location: "/usr/bin/fping6"
           LogSlowQueries: "3000"
 
-      # MariaDB
-      mariadb:
+      # mysql
+      mysql:
         enabled: true
         src: "third_party"
-        version: "10.5"
+        version: "8.0"
+        service:
+          state: "restarted"
+          enabled: true
 
-      # MariaDB -> install
-      mariadb_install:
+      # mysql -> install
+      mysql_install:
         enabled: true
+        packages:
+          Debian: [mysql-server]
+          RedHat: [mysql-server]
+        dependencies:
+          Debian: [gnupg2, python3, python3-pymysql]
+          RedHat: [python3, python3-PyMySQL]
 
-      # MariaDB -> remove old
-      mariadb_remove:
+      # mysql -> remove
+      mysql_remove:
         enabled: true
+        packages:
+          Debian: ["mariadb-client*"]
+          RedHat: ["mariadb-client*"]
 
-      # MariaDB -> database
-      mariadb_database:
+      # mysql -> database
+      mysql_database:
         zabbix_server:
           enabled: true
           remove_old: true
@@ -88,30 +100,30 @@
           login_password: ""
           login_host: "localhost"
           login_port: "{{ zabbix_server.db_port }}"
-          login_unix_socket: "{{ mariadb_const[ansible_os_family]['socket'] }}"
+          login_unix_socket: "{{ mysql_const[ansible_os_family]['socket'] }}"
           name: "{{ zabbix_server.db_name }}"
           state: "present"
           target: ""
           encoding: "utf8"
           collation: "utf8_bin"
 
-      # MariaDB -> user
-      mariadb_user:
+      # mysql -> user
+      mysql_user:
         zabbix_server:
           enabled: true
           login_user: "root"
           login_password: ""
           login_host: "localhost"
           login_port: "{{ zabbix_server.db_port }}"
-          login_unix_socket: "{{ mariadb_const[ansible_os_family]['socket'] }}"
+          login_unix_socket: "{{ mysql_const[ansible_os_family]['socket'] }}"
           name: "{{ zabbix_server.db_user }}"
           password: "{{ zabbix_server.db_password }}"
           state: "present"
           privileges: 'zabbix.*:ALL'
           encrypted: false
 
-      # MariaDB -> sql
-      mariadb_sql:
+      # mysql -> sql
+      mysql_sql:
         zabbix_server:
           schema: true
 

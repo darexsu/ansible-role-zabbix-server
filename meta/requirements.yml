@@ -1,2 +1,4 @@
 ---
 - name: darexsu.mariadb
+
+- role: darexsu.mysql

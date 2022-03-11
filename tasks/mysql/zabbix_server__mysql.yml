@@ -1,0 +1,58 @@
+---
+- name: include role mysql
+  include_role:
+    name: darexsu.mysql
+
+- name: remove old zabbix database
+  community.mysql.mysql_db:
+    login_user: "{{ mysql_database.zabbix_server.login_user }}"
+    login_password: "{{ mysql_database.zabbix_server.login_password }}"
+    login_host: "{{ mysql_database.zabbix_server.login_host }}"
+    login_port: "{{ mysql_database.zabbix_server.login_port }}"
+    login_unix_socket: "{{ mysql_database.zabbix_server.login_unix_socket }}"
+    name: "{{ mysql_database.zabbix_server.name }}"
+    state: "absent"
+    target: "{{ mysql_database.zabbix_server.target }}"
+    encoding: "{{ mysql_database.zabbix_server.encoding }}"
+    collation: "{{ mysql_database.zabbix_server.collation }}"
+  when: mysql_database.zabbix_server.remove_old
+
+- name: create zabbix database
+  community.mysql.mysql_db:
+    login_user: "{{ mysql_database.zabbix_server.login_user }}"
+    login_password: "{{ mysql_database.zabbix_server.login_password }}"
+    login_host: "{{ mysql_database.zabbix_server.login_host }}"
+    login_port: "{{ mysql_database.zabbix_server.login_port }}"
+    login_unix_socket: "{{ mysql_database.zabbix_server.login_unix_socket }}"
+    name: "{{ mysql_database.zabbix_server.name }}"
+    state: "{{ mysql_database.zabbix_server.state }}"
+    target: "{{ mysql_database.zabbix_server.target }}"
+    encoding: "{{ mysql_database.zabbix_server.encoding }}"
+    collation: "{{ mysql_database.zabbix_server.collation }}"
+  when: mysql_database.zabbix_server.enabled
+
+- name: zabbix user
+  community.mysql.mysql_user:
+    login_user: "{{ mysql_user.zabbix_server.login_user }}"
+    login_password: "{{ mysql_user.zabbix_server.login_password }}"
+    login_host: "{{ mysql_user.zabbix_server.login_host }}"
+    login_port: "{{ mysql_user.zabbix_server.login_port }}"
+    login_unix_socket: "{{ mysql_user.zabbix_server.login_unix_socket }}"
+    name: "{{ mysql_user.zabbix_server.name }}"
+    password: "{{ mysql_user.zabbix_server.password }}"
+    priv: "{{ mysql_user.zabbix_server.privileges }}"
+    state: "{{ mysql_user.zabbix_server.state }}"
+    encrypted: "{{ mysql_user.zabbix_server.encrypted }}"
+  when: mysql_user.zabbix_server.enabled
+
+- name: import sql schema
+  community.mysql.mysql_db:
+    login_user: "{{ mysql_database.zabbix_server.login_user }}"
+    login_password: "{{ mysql_database.zabbix_server.login_password }}"
+    login_host: "{{ mysql_database.zabbix_server.login_host }}"
+    login_port: "{{ mysql_database.zabbix_server.login_port }}"
+    login_unix_socket: "{{ mysql_database.zabbix_server.login_unix_socket }}"
+    name: "{{ mysql_database.zabbix_server.name }}"
+    state: "import"
+    target: "/usr/share/doc/zabbix-sql-scripts/mysql/server.sql.gz"
+  when: mysql_sql.zabbix_server.schema

@@ -1,23 +1,15 @@
 ---
-# zabbix_server
-#   |   ├── install
-#   |   |    ├── repo
-#   |   |    ├── packages
-#   |   |    └── dependencies
-#   |   └── config
-#   |        └── server.cnf
-# mariadb
-#       ├── install
-#       └── actions
-#            ├── create database
-#            ├── create user
-#            └── import server.sql
+#  Zabbix_server
+#        |
+#       / \
+# MariaDB  MySQL
 
-# zabbix_server -> global
+# Zabbix_server
 zabbix_server:
   enabled: false
+  src: "third_party"
   version: "6.0"
-  server_name: "Zabbix server"  
+  server_name: "Zabbix server"
   db_type: "MYSQL"
   db_port: "3306"
   db_host: "localhost"
@@ -28,33 +20,21 @@ zabbix_server:
     state: "started"
     enabled: true
 
-# zabbix_server -> repo
-zabbix_server_repo:
-  enabled: true
-  zabbix:
-    deb: "deb http://repo.zabbix.com/zabbix/{{ zabbix_server.version }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} main"
-    deb_key: "http://repo.zabbix.com/zabbix-official-repo.key"
-    rpm: "http://repo.zabbix.com/zabbix/{{ zabbix_server.version }}/rhel/{{ ansible_distribution_major_version }}/x86_64/zabbix-release-{{ zabbix_server.version }}-1.el{{ ansible_distribution_major_version }}.noarch.rpm"
-    rpm_key: "http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591"
-
-# zabbix_server -> install
+# Zabbix_server -> install
 zabbix_server_install:
   enabled: false
   packages:
-    debian: [zabbix-server-mysql, zabbix-sql-scripts]
-    redhat: [zabbix-server-mysql, zabbix-sql-scripts]
+    Debian: [zabbix-server-mysql, zabbix-agent, zabbix-sql-scripts]
+    RedHat: [zabbix-server-mysql, zabbix-agent, zabbix-sql-scripts]
   dependencies:
-    debian: [apt-transport-https, ca-certificates, gnupg2, lsb-release]
-    redhat: []
+    Debian: [apt-transport-https, ca-certificates, gnupg2, lsb-release]
+    RedHat: []
 
-# zabbix_server -> config
+# Zabbix_server -> config
 zabbix_server_conf:
   enabled: false
   file: "zabbix_server.conf"
   src: "zabbix_server_conf.j2"
-  path:
-    debian: "/etc/zabbix/"
-    redhat: "/etc/zabbix/"
   backup: false
   vars:
     ListenPort: "10051"
@@ -152,22 +132,44 @@ zabbix_server_conf:
     DBTLSCipher13: ""
     ListenBacklog: ""
 
-# mariadb -> global
+# Zabbix_server -> constants
+zabbix_server_const:
+  Debian:
+    repo: "deb http://repo.zabbix.com/zabbix/{{ zabbix_server.version }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} main"
+    gpg: "http://repo.zabbix.com/zabbix-official-repo.key"
+    config_path: "/etc/zabbix/"
+  RedHat:
+    repo: "http://repo.zabbix.com/zabbix/{{ zabbix_server.version }}/rhel/{{ ansible_distribution_major_version }}/x86_64/zabbix-release-{{ zabbix_server.version }}-1.el{{ ansible_distribution_major_version }}.noarch.rpm"
+    gpg: "http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591"
+    config_path: "/etc/zabbix/"
+
+# MariaDB
 mariadb:
   enabled: false
-  version: "10.6"
+  src: "third_party"
+  version: "10.5"
+  service:
+    state: "started"
+    enabled: true
 
-# repo
-mariadb_repo:
-  enabled: true
-
-# mariadb -> install
+# MariaDB -> install
 mariadb_install:
   enabled: false
-  remove_old:
-    enabled: false
+  packages:
+    Debian: [mariadb-server]
+    RedHat: [mariadb-server]
+  dependencies:
+    Debian: [gnupg2, python3, python3-pymysql]
+    RedHat: [python3, python3-PyMySQL]
 
-# mariadb -> database
+# MariaDB -> remove old
+mariadb_remove:
+  enabled: false
+  packages:
+    Debian: ["mariadb-client*"]
+    RedHat: ["mariadb-client*"]
+
+# MariaDB -> database
 mariadb_database:
   zabbix_server:
     enabled: false
@@ -176,16 +178,14 @@ mariadb_database:
     login_password: ""
     login_host: "localhost"
     login_port: "{{ zabbix_server.db_port }}"
-    login_unix_socket: 
-      debian: "/run/mysqld/mysqld.sock"
-      redhat: "/var/lib/mysql/mysql.sock"
+    login_unix_socket: "{{ mariadb_const[ansible_os_family]['socket'] }}"
     name: "{{ zabbix_server.db_name }}"
     state: "present"
     target: ""
     encoding: "utf8"
-    collation: "utf8_bin"    
+    collation: "utf8_bin"
 
-# mariadb -> user
+# MariaDB -> user
 mariadb_user:
   zabbix_server:
     enabled: false
@@ -193,16 +193,116 @@ mariadb_user:
     login_password: ""
     login_host: "localhost"
     login_port: "{{ zabbix_server.db_port }}"
-    login_unix_socket: 
-      debian: "/run/mysqld/mysqld.sock"
-      redhat: "/var/lib/mysql/mysql.sock"
+    login_unix_socket: "{{ mariadb_const[ansible_os_family]['socket'] }}"
     name: "{{ zabbix_server.db_user }}"
     password: "{{ zabbix_server.db_password }}"
-    state: "present"    
+    state: "present"
     privileges: 'zabbix.*:ALL'
     encrypted: false
 
-# mariadb -> sql
+# MariaDB -> sql
 mariadb_sql:
   zabbix_server:
     schema: false
+
+# MariaDB -> constants
+mariadb_const:
+  Debian:
+    config_file: "50-server.cnf"
+    config_path: "/etc/mysql/mariadb.conf.d/"
+    mariadb_repo: "deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/{{ mariadb.version }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} main"
+    mariadb_gpg: "https://mariadb.org/mariadb_release_signing_key.asc"
+    pid-file: "/run/mysqld/mysqld.pid"
+    socket: "/run/mysqld/mysqld.sock"
+  RedHat:
+    config_file: "mariadb-server.cnf"
+    config_path: "/etc/my.cnf.d/"
+    mariadb_repo: "http://yum.mariadb.org/{{ mariadb.version }}/rhel/$releasever/$basearch"
+    mariadb_gpg: "https://yum.mariadb.org/RPM-GPG-KEY-MariaDB"
+    pid-file: "/var/lib/mysql/mariadb.pid"
+    socket: "/var/lib/mysql/mysql.sock"
+
+# mysql
+mysql:
+  enabled: false
+  src: "third_party"
+  version: "8.0"
+  service:
+    state: "started"
+    enabled: true
+
+# mysql -> install
+mysql_install:
+  enabled: false
+  packages:
+    Debian: [mysql-server]
+    RedHat: [mysql-server]
+  dependencies:
+    Debian: [gnupg2, python3, python3-pymysql]
+    RedHat: [python3, python3-PyMySQL]
+
+# mysql -> remove
+mysql_remove:
+  enabled: false
+  packages:
+    Debian: ["mariadb-client*"]
+    RedHat: ["mariadb-client*"]
+
+# mysql -> database
+mysql_database:
+  zabbix_server:
+    enabled: false
+    remove_old: false
+    login_user: "root"
+    login_password: ""
+    login_host: "localhost"
+    login_port: "{{ zabbix_server.db_port }}"
+    login_unix_socket: "{{ mysql_const[ansible_os_family]['socket'] }}"
+    name: "{{ zabbix_server.db_name }}"
+    state: "present"
+    target: ""
+    encoding: "utf8"
+    collation: "utf8_bin"
+
+# mysql -> user
+mysql_user:
+  zabbix_server:
+    enabled: false
+    login_user: "root"
+    login_password: ""
+    login_host: "localhost"
+    login_port: "{{ zabbix_server.db_port }}"
+    login_unix_socket: "{{ mysql_const[ansible_os_family]['socket'] }}"
+    name: "{{ zabbix_server.db_user }}"
+    password: "{{ zabbix_server.db_password }}"
+    state: "present"
+    privileges: 'zabbix.*:ALL'
+    encrypted: false
+
+# mysql -> sql
+mysql_sql:
+  zabbix_server:
+    schema: false
+
+# mysql -> constants
+mysql_const:
+  Debian:
+    service_name: "mysql"
+    config_file: "mysqld.cnf"
+    config_path: "/etc/mysql/mysql.conf.d/"
+    mysql_repo: "deb https://repo.mysql.com/apt/{{ ansible_distribution | lower }}/ {{ ansible_distribution_release }} mysql-{{ mysql.version }} "
+    mysql_gpg: "3A79BD29"
+    pid-file: "/var/run/mysqld/mysqld.pid"
+    socket: "/var/run/mysqld/mysqld.sock"
+    datadir: "/var/lib/mysql"
+    log-error: "/var/log/mysql/error.log"
+  RedHat:
+    service_name: "mysqld"
+    config_file: "my.cnf"
+    config_path: "/etc/"
+    mysql_repo: "https://repo.mysql.com/yum/mysql-{{ mysql.version }}-community/el/$releasever/$basearch"
+    mysql_gpg: "https://repo.mysql.com/RPM-GPG-KEY-mysql-2022"
+    pid-file: "/var/run/mysqld/mysqld.pid"
+    socket: "/var/lib/mysql/mysql.sock"
+    datadir: "/var/lib/mysql"
+    log-error: "/var/log/mysqld.log"
