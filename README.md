@@ -11,7 +11,9 @@
 | Oracle Linux 8   |  Zabbix  6.0 lts   |
 | Rocky Linux 8    |  Zabbix  6.0 lts   |           
                                           
-Zabbix Roles: [zabbix-server](https://github.com/darexsu/ansible-role-zabbix-server/), [zabbix-agent](https://github.com/darexsu/ansible-role-zabbix-agent/), [zabbix-gui](https://github.com/darexsu/ansible-role-zabbix-gui/)                                          
+Compatible with roles: [MariaDB](https://github.com/darexsu/ansible-role-mariadb), [MySQL](https://github.com/darexsu/ansible-role-mysql)
+
+Another Zabbix roles: [Zabbix-server](https://github.com/darexsu/ansible-role-zabbix-server/), [Zabbix-agent](https://github.com/darexsu/ansible-role-zabbix-agent/), [Zabbix-gui](https://github.com/darexsu/ansible-role-zabbix-gui/)                                       
 
 ### 1) Install role from Galaxy
 ```
