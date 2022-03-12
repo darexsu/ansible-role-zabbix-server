@@ -1,0 +1,4 @@
+---
+- name: include role mysql
+  include_role:
+    name: darexsu.mysql

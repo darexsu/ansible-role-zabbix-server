@@ -119,10 +119,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       mariadb_install:
         enabled: true
 
-      # MariaDB -> remove old
-      mariadb_remove:
-        enabled: true
-
       # MariaDB -> database
       mariadb_database:
         zabbix_server:
@@ -252,13 +248,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         dependencies:
           Debian: [gnupg2, python3, python3-pymysql]
           RedHat: [python3, python3-PyMySQL]
-
-      # mysql -> remove
-      mysql_remove:
-        enabled: true
-        packages:
-          Debian: ["mariadb-client*"]
-          RedHat: ["mariadb-client*"]
 
       # mysql -> database
       mysql_database:

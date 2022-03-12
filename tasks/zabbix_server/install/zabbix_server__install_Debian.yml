@@ -24,4 +24,5 @@
     name: "{{ item }}"
     state: present
     update_cache: true
+    install_recommends: no
   with_items: "{{ zabbix_server_install.packages.Debian }}"

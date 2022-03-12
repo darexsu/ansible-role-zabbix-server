@@ -1,0 +1,4 @@
+---
+- name: include role mariadb
+  include_role:
+    name: darexsu.mariadb

@@ -1,8 +1,4 @@
 ---
-- name: include role mariadb
-  include_role:
-    name: darexsu.mariadb
-
 - name: remove old zabbix database
   community.mysql.mysql_db:
     login_user: "{{ mariadb_database.zabbix_server.login_user }}"

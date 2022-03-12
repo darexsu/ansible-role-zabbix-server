@@ -17,6 +17,14 @@
       merge: "{{ zabbix_server_default_vars | combine(merge, recursive=True)}}"
   when: merge is defined
 
+- name: include mariadb install_and_config
+  include_tasks: ./tasks/mariadb/install_and_config.yml
+  when: mariadb.enabled
+
+- name: include mysql install_and_config
+  include_tasks: ./tasks/mysql/install_and_config.yml
+  when: mysql.enabled
+
 - name: zabbix_server role is disabled
   meta: end_play
   when: not zabbix_server.enabled
@@ -30,11 +38,11 @@
   when: zabbix_server_conf.enabled
 
 - name: include mariadb tasks
-  include_tasks: ./tasks/mariadb/zabbix_server__mariadb.yml
+  include_tasks: ./tasks/mariadb/tasks.yml
   when: mariadb.enabled
 
 - name: include mysql tasks
-  include_tasks: ./tasks/mysql/zabbix_server__mysql.yml
+  include_tasks: ./tasks/mysql/tasks.yml
   when: mysql.enabled
 
 - name: zabbix-server service

@@ -75,10 +75,6 @@
       mariadb_install:
         enabled: true
 
-      # MariaDB -> remove old
-      mariadb_remove:
-        enabled: true
-
       # MariaDB -> database
       mariadb_database:
         zabbix_server:
