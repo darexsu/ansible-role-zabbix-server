@@ -120,6 +120,30 @@
         zabbix_server:
           schema: true
 
+      # FirewallD
+      firewalld:
+        enabled: true
+      # FirewallD -> rules
+      firewalld_rules:
+        zabbix_port_10050:
+          enabled: true
+          zone: "public"
+          state: "enabled"
+          port: "10050/tcp"
+          permanent: true
+        zabbix_port_10051:
+          enabled: true
+          zone: "public"
+          state: "enabled"
+          port: "10051/tcp"
+          permanent: true
+        mysql_port_3306:
+          enabled: true
+          zone: "public"
+          state: "enabled"
+          port: "3306/tcp"
+          permanent: true
+
   tasks:
     - name: include role darexsu.zabbix_server
       include_role:

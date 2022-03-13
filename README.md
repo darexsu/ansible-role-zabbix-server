@@ -9,16 +9,15 @@
       - [relative](#relative)
       - [behaviour](#behaviour)
   - Playbooks (short version):
-      - [install and configure: Zabbix-server, MariaDB](#install-and-configure-zabbix-server-mariadb-short-version)
-      - [install and configure: Zabbix-server, MySQL](#install-and-configure-zabbix-server-mysql-short-version)
+      - [install and configure: Zabbix-server, MariaDB, FirewallD](#install-and-configure-zabbix-server-mariadb-short-version)
+      - [install and configure: Zabbix-server, MySQL, FirewallD](#install-and-configure-zabbix-server-mysql-short-version)
       - [install: zabbix-server](#install-zabbix-server-short-version)
       - [configure: zabbix_server.conf](#configure-zabbix_serverconf-short-version)  
   - Playbooks (full version):
-      - [install and configure: Zabbix-server, MariaDB](#install-and-configure-zabbix-server-mariadb-full-version)
-      - [install and configure: Zabbix-server, MySQL](#install-and-configure-zabbix-server-mysql-full-version)
+      - [install and configure: Zabbix-server, MariaDB, FirewallD](#install-and-configure-zabbix-server-mariadb-full-version)
+      - [install and configure: Zabbix-server, MySQL, FirewallD](#install-and-configure-zabbix-server-mysql-full-version)
       - [install: zabbix-server](#install-zabbix-server-full-version)
       - [configure: zabbix_server.conf](#configure-zabbix_serverconf-full-version)
-
 
 ### Platforms
 
@@ -37,7 +36,7 @@ ansible-galaxy install darexsu.nginx --force
 ```
 ### Requirements
 
-dependencies will automatically be installed: [MariaDB](https://github.com/darexsu/ansible-role-mariadb), [MySQL](https://github.com/darexsu/ansible-role-mysql)
+dependencies will automatically be installed: [MariaDB](https://github.com/darexsu/ansible-role-mariadb), [MySQL](https://github.com/darexsu/ansible-role-mysql), [FirewallD](https://github.com/darexsu/ansible-role-firewalld)
 
 ### Relative
 
@@ -110,6 +109,18 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         zabbix_server:
           schema: true
 
+      # FirewallD
+      firewalld:
+        enabled: true
+      # FirewallD -> rules
+      firewalld_rules:
+        zabbix_port_10050:
+          enabled: true
+        zabbix_port_10051:
+          enabled: true
+        mysql_port_3306:
+          enabled: true
+
   tasks:
   - name: include role darexsu.zabbix_server
     include_role: 
@@ -164,6 +175,18 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       mysql_sql:
         zabbix_server:
           schema: true
+      
+      # FirewallD
+      firewalld:
+        enabled: true
+      # FirewallD -> rules
+      firewalld_rules:
+        zabbix_port_10050:
+          enabled: true
+        zabbix_port_10051:
+          enabled: true
+        mysql_port_3306:
+          enabled: true
 
   tasks:
     - name: include role darexsu.zabbix_server
@@ -358,6 +381,30 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       mariadb_sql:
         zabbix_server:
           schema: true
+      
+      # FirewallD
+      firewalld:
+        enabled: true
+      # FirewallD -> rules
+      firewalld_rules:
+        zabbix_port_10050:
+          enabled: true
+          zone: "public"
+          state: "enabled"
+          port: "10050/tcp"
+          permanent: true
+        zabbix_port_10051:
+          enabled: true
+          zone: "public"
+          state: "enabled"
+          port: "10051/tcp"
+          permanent: true
+        mysql_port_3306:
+          enabled: true
+          zone: "public"
+          state: "enabled"
+          port: "3306/tcp"
+          permanent: true
 
   tasks:
   - name: include role darexsu.zabbix_server
@@ -482,6 +529,30 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       mysql_sql:
         zabbix_server:
           schema: true
+
+      # FirewallD
+      firewalld:
+        enabled: true
+      # FirewallD -> rules
+      firewalld_rules:
+        zabbix_port_10050:
+          enabled: true
+          zone: "public"
+          state: "enabled"
+          port: "10050/tcp"
+          permanent: true
+        zabbix_port_10051:
+          enabled: true
+          zone: "public"
+          state: "enabled"
+          port: "10051/tcp"
+          permanent: true
+        mysql_port_3306:
+          enabled: true
+          zone: "public"
+          state: "enabled"
+          port: "3306/tcp"
+          permanent: true
 
   tasks:
     - name: include role darexsu.zabbix_server

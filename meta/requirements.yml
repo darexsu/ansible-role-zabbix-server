@@ -2,3 +2,5 @@
 - name: darexsu.mariadb
 
 - role: darexsu.mysql
+
+- role: darexsu.firewalld

@@ -3,6 +3,9 @@
 #        |
 #       / \
 # MariaDB  MySQL
+#       \ /
+#        |
+#    FirewallD
 
 # Zabbix_server
 zabbix_server:
@@ -215,7 +218,7 @@ mariadb_const:
     pid-file: "/var/lib/mysql/mariadb.pid"
     socket: "/var/lib/mysql/mysql.sock"
 
-# mysql
+# MySQL
 mysql:
   enabled: false
   src: "third_party"
@@ -224,7 +227,7 @@ mysql:
     state: "started"
     enabled: true
 
-# mysql -> install
+# MySQL -> install
 mysql_install:
   enabled: false
   packages:
@@ -234,7 +237,7 @@ mysql_install:
     Debian: [gnupg2, python3, python3-pymysql]
     RedHat: [python3, python3-PyMySQL]
 
-# mysql -> database
+# MySQL -> database
 mysql_database:
   zabbix_server:
     enabled: false
@@ -250,7 +253,7 @@ mysql_database:
     encoding: "utf8"
     collation: "utf8_bin"
 
-# mysql -> user
+# MySQL -> user
 mysql_user:
   zabbix_server:
     enabled: false
@@ -265,12 +268,12 @@ mysql_user:
     privileges: 'zabbix.*:ALL'
     encrypted: false
 
-# mysql -> sql
+# MySQL -> sql
 mysql_sql:
   zabbix_server:
     schema: false
 
-# mysql -> constants
+# MySQL -> constants
 mysql_const:
   Debian:
     service_name: "mysql"
@@ -292,3 +295,28 @@ mysql_const:
     socket: "/var/lib/mysql/mysql.sock"
     datadir: "/var/lib/mysql"
     log-error: "/var/log/mysqld.log"
+
+# FirewallD
+firewalld:
+  enabled: true
+
+# FirewallD -> rules
+firewalld_rules:
+  zabbix_port_10050:
+    enabled: true
+    zone: "public"
+    state: "enabled"
+    port: "10050/tcp"
+    permanent: true
+  zabbix_port_10051:
+    enabled: true
+    zone: "public"
+    state: "enabled"
+    port: "10051/tcp"
+    permanent: true
+  mysql_port_3306:
+    enabled: true
+    zone: "public"
+    state: "enabled"
+    port: "3306/tcp"
+    permanent: true

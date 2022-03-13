@@ -26,7 +26,6 @@
         service:
           state: "started"
           enabled: true
-
       # Zabbix_server -> install
       zabbix_server_install:
         enabled: true
@@ -36,7 +35,6 @@
         dependencies:
           Debian: [apt-transport-https, ca-certificates, gnupg2, lsb-release]
           RedHat: []
-
       # Zabbix_server -> config
       zabbix_server_conf:
         enabled: true
@@ -70,11 +68,9 @@
         enabled: true
         src: "third_party"
         version: "10.5"
-
       # MariaDB -> install
       mariadb_install:
         enabled: true
-
       # MariaDB -> database
       mariadb_database:
         zabbix_server:
@@ -90,7 +86,6 @@
           target: ""
           encoding: "utf8"
           collation: "utf8_bin"
-
       # MariaDB -> user
       mariadb_user:
         zabbix_server:
@@ -105,11 +100,34 @@
           state: "present"
           privileges: 'zabbix.*:ALL'
           encrypted: false
-
       # MariaDB -> sql
       mariadb_sql:
         zabbix_server:
           schema: true
+
+      # FirewallD
+      firewalld:
+        enabled: true
+      # FirewallD -> rules
+      firewalld_rules:
+        zabbix_port_10050:
+          enabled: true
+          zone: "public"
+          state: "enabled"
+          port: "10050/tcp"
+          permanent: true
+        zabbix_port_10051:
+          enabled: true
+          zone: "public"
+          state: "enabled"
+          port: "10051/tcp"
+          permanent: true
+        mysql_port_3306:
+          enabled: true
+          zone: "public"
+          state: "enabled"
+          port: "3306/tcp"
+          permanent: true
 
   tasks:
     - name: include role darexsu.zabbix_server
