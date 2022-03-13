@@ -5,7 +5,7 @@
   - Role:
     - [platforms](#platforms)
     - [install](#install)
-    - [compatible](#compatible)
+    - [requirements](#requirements)
     - [relative](#relative)
     - [behaviour](#behaviour)
   - Playbooks:
@@ -29,9 +29,9 @@
 ```
 ansible-galaxy install darexsu.nginx --force
 ```
-### Compatible
+### Requirements
 
-Compatible with roles: [MariaDB](https://github.com/darexsu/ansible-role-mariadb), [MySQL](https://github.com/darexsu/ansible-role-mysql)
+dependencies will automatically be installed: [MariaDB](https://github.com/darexsu/ansible-role-mariadb), [MySQL](https://github.com/darexsu/ansible-role-mysql)
 
 ### Relative
 
