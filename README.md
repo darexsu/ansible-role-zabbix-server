@@ -2,6 +2,20 @@
 
 [![CI Molecule](https://github.com/darexsu/ansible-role-zabbix-server/actions/workflows/ci.yml/badge.svg)](https://github.com/darexsu/ansible-role-zabbix-server/actions/workflows/ci.yml)&emsp;![](https://img.shields.io/static/v1?label=idempotence&message=ok&color=success)&emsp;![Ansible Role](https://img.shields.io/ansible/role/d/58157?color=blue&label=downloads)
 
+  - Role:
+    - [platforms](#platforms)
+    - [install](#install)
+    - [compatible](#compatible)
+    - [relative](#relative)
+    - [behaviour](#behaviour)
+  - Playbooks:
+      - [install and configure: Zabbix-server, MariaDB](#install-and-configure-zabbix-server-mariadb)
+      - [install and configure: Zabbix-server, MySQL](#install-and-configure-zabbix-server-mysql)
+      - [install: zabbix-server](#install-zabbix-server)
+      - [configure: zabbix_server.conf](#configure-zabbix_serverconf)
+
+### Platforms
+
 |  Testing         |  Zabbix repo       |
 | :--------------: | :----------------: |
 | Debian 11        |  Zabbix  6.0 lts   |
@@ -9,25 +23,21 @@
 | Ubuntu 20.04     |  Zabbix  6.0 lts   |
 | Ubuntu 18.04     |  Zabbix  6.0 lts   |
 | Oracle Linux 8   |  Zabbix  6.0 lts   |
-| Rocky Linux 8    |  Zabbix  6.0 lts   |           
-                                          
-Compatible with roles: [MariaDB](https://github.com/darexsu/ansible-role-mariadb), [MySQL](https://github.com/darexsu/ansible-role-mysql)
+| Rocky Linux 8    |  Zabbix  6.0 lts   |
 
-Another Zabbix roles: [Zabbix-server](https://github.com/darexsu/ansible-role-zabbix-server/), [Zabbix-agent](https://github.com/darexsu/ansible-role-zabbix-agent/), [Zabbix-gui](https://github.com/darexsu/ansible-role-zabbix-gui/)                                       
-
-### 1) Install role from Galaxy
+### Install
 ```
 ansible-galaxy install darexsu.nginx --force
 ```
-### 2) Example playbooks: 
-  
-  - [full playbook Zabbix-server, MariaDB](#full-playbook-zabbix-server-mariadb)
-  - [full playbook Zabbix-server, MySQL](#full-playbook-zabbix-server-mysql) 
-    - install
-      - [zabbix-server](#install-zabbix-server)
-    - config
-      - [zabbix_server.conf](#configure-zabbix-serverconf)
+### Compatible
 
+Compatible with roles: [MariaDB](https://github.com/darexsu/ansible-role-mariadb), [MySQL](https://github.com/darexsu/ansible-role-mysql)
+
+### Relative
+
+Another Zabbix roles: [Zabbix-server](https://github.com/darexsu/ansible-role-zabbix-server/), [Zabbix-agent](https://github.com/darexsu/ansible-role-zabbix-agent/), [Zabbix-gui](https://github.com/darexsu/ansible-role-zabbix-gui/)                                       
+
+### Behaviour
 Replace or Merge dictionaries (with "hash_behaviour=replace" in ansible.cfg):
 ```
 # Replace             # Merge
@@ -47,7 +57,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
                                       c: "3"
     
 ```
-##### Full playbook Zabbix-server, MariaDB
+### Install and configure: Zabbix-server, MariaDB
 ```yaml
 - name: Converge
   hosts: all
@@ -161,7 +171,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       name: darexsu.zabbix_server
 
 ```
-##### Full playbook Zabbix-server, MySQL
+##### Install and configure: Zabbix-server, MySQL
 ```yaml
 ---
 - name: Converge
@@ -290,7 +300,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       include_role:
         name: darexsu.zabbix_server
 ```
-##### Install Zabbix-server
+##### Install: zabbix-server
 
 ```yaml
 - name: Converge
@@ -360,7 +370,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
 
 ```
 
-##### Configure zabbix-server.conf
+##### Configure: zabbix_server.conf
 ```yaml
 - name: Converge
   hosts: all
