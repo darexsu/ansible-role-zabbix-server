@@ -627,7 +627,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
 
 ```
 
-##### Configure: zabbix_server.conf
+##### Configure: zabbix_server.conf (full version)
 ```yaml
 - name: Converge
   hosts: all
