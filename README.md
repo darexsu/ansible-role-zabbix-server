@@ -274,7 +274,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         service:
           state: "started"
           enabled: true
-
       # Zabbix_server -> install
       zabbix_server_install:
         enabled: true
@@ -284,7 +283,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         dependencies:
           Debian: [apt-transport-https, ca-certificates, gnupg2, lsb-release]
           RedHat: []
-
       # Zabbix_server -> config
       zabbix_server_conf:
         enabled: true
@@ -318,7 +316,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         enabled: true
         src: "third_party"
         version: "10.5"
-
       # MariaDB -> install
       mariadb_install:
         enabled: false
@@ -328,7 +325,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         dependencies:
           Debian: [gnupg2, python3, python3-pymysql]
           RedHat: [python3, python3-PyMySQL]
-
       # MariaDB -> database
       mariadb_database:
         zabbix_server:
@@ -344,7 +340,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           target: ""
           encoding: "utf8"
           collation: "utf8_bin"
-
       # MariaDB -> user
       mariadb_user:
         zabbix_server:
@@ -359,7 +354,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           state: "present"
           privileges: 'zabbix.*:ALL'
           encrypted: false
-
       # MariaDB -> sql
       mariadb_sql:
         zabbix_server:
@@ -401,7 +395,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         service:
           state: "started"
           enabled: true
-
       # Zabbix_server -> install
       zabbix_server_install:
         enabled: true
@@ -411,7 +404,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         dependencies:
           Debian: [apt-transport-https, ca-certificates, gnupg2, lsb-release]
           RedHat: []
-
       # Zabbix_server -> config
       zabbix_server_conf:
         enabled: true
@@ -448,7 +440,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         service:
           state: "restarted"
           enabled: true
-
       # MySQL -> install
       mysql_install:
         enabled: true
@@ -458,7 +449,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         dependencies:
           Debian: [gnupg2, python3, python3-pymysql]
           RedHat: [python3, python3-PyMySQL]
-
       # MySQL -> database
       mysql_database:
         zabbix_server:
@@ -474,7 +464,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           target: ""
           encoding: "utf8"
           collation: "utf8_bin"
-
       # MySQL -> user
       mysql_user:
         zabbix_server:
@@ -489,7 +478,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           state: "present"
           privileges: 'zabbix.*:ALL'
           encrypted: false
-
       # MySQL -> sql
       mysql_sql:
         zabbix_server:
@@ -524,7 +512,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         service:
           state: "started"
           enabled: true
-
       # Zabbix_server -> install
       zabbix_server_install:
         enabled: true
@@ -534,7 +521,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         dependencies:
           Debian: [apt-transport-https, ca-certificates, gnupg2, lsb-release]
           RedHat: []
-
       # Zabbix_server -> config
       zabbix_server_conf:
         enabled: true
@@ -593,7 +579,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
         service:
           state: "started"
           enabled: true
-
       # Zabbix_server -> config
       zabbix_server_conf:
         enabled: true
