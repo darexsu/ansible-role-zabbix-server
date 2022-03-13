@@ -3,16 +3,22 @@
 [![CI Molecule](https://github.com/darexsu/ansible-role-zabbix-server/actions/workflows/ci.yml/badge.svg)](https://github.com/darexsu/ansible-role-zabbix-server/actions/workflows/ci.yml)&emsp;![](https://img.shields.io/static/v1?label=idempotence&message=ok&color=success)&emsp;![Ansible Role](https://img.shields.io/ansible/role/d/58157?color=blue&label=downloads)
 
   - Role:
-    - [platforms](#platforms)
-    - [install](#install)
-    - [requirements](#requirements)
-    - [relative](#relative)
-    - [behaviour](#behaviour)
-  - Playbooks:
-      - [install and configure: Zabbix-server, MariaDB](#install-and-configure-zabbix-server-mariadb)
-      - [install and configure: Zabbix-server, MySQL](#install-and-configure-zabbix-server-mysql)
-      - [install: zabbix-server](#install-zabbix-server)
-      - [configure: zabbix_server.conf](#configure-zabbix_serverconf)
+      - [platforms](#platforms)
+      - [install](#install)
+      - [requirements](#requirements)
+      - [relative](#relative)
+      - [behaviour](#behaviour)
+  - Playbooks (short version):
+      - [install and configure: Zabbix-server, MariaDB](#install-and-configure-zabbix-server-mariadb-short-version)
+      - [install and configure: Zabbix-server, MySQL](#install-and-configure-zabbix-server-mysql-short-version)
+      - [install: zabbix-server](#install-zabbix-server-short-version)
+      - [configure: zabbix_server.conf](#configure-zabbix_serverconf-short-version)  
+  - Playbooks (full version):
+      - [install and configure: Zabbix-server, MariaDB](#install-and-configure-zabbix-server-mariadb-full-version)
+      - [install and configure: Zabbix-server, MySQL](#install-and-configure-zabbix-server-mysql-full-version)
+      - [install: zabbix-server](#install-zabbix-server-full-version)
+      - [configure: zabbix_server.conf](#configure-zabbix_serverconf-full-version)
+
 
 ### Platforms
 
@@ -57,10 +63,198 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
                                       c: "3"
     
 ```
-### Install and configure: Zabbix-server, MariaDB
+### Install and configure: Zabbix-server, MariaDB (short version)
 ```yaml
-- name: Converge
-  hosts: all
+- hosts: all
+  become: true
+
+  vars:
+    merge:
+      # Zabbix_server
+      zabbix_server:
+        enabled: true
+        version: "6.0"
+        server_name: "Zabbix server"
+        db_type: "MYSQL"
+        db_port: "3306"
+        db_host: "localhost"
+        db_name: "zabbix"
+        db_user: "zabbix"
+        db_password: "change_me"
+      # Zabbix_server -> install
+      zabbix_server_install:
+        enabled: true
+      # Zabbix_server -> config
+      zabbix_server_conf:
+        enabled: true
+
+      # MariaDB
+      mariadb:
+        enabled: true
+        src: "third_party"
+        version: "10.5"
+      # MariaDB -> install
+      mariadb_install:
+        enabled: true
+      # MariaDB -> database
+      mariadb_database:
+        zabbix_server:
+          enabled: true
+          remove_old: true
+      # MariaDB -> user
+      mariadb_user:
+        zabbix_server:
+          enabled: true
+      # MariaDB -> sql
+      mariadb_sql:
+        zabbix_server:
+          schema: true
+
+  tasks:
+  - name: include role darexsu.zabbix_server
+    include_role: 
+      name: darexsu.zabbix_server
+
+```
+##### Install and configure: Zabbix-server, MySQL (short version)
+```yaml
+---
+- hosts: all
+  become: true
+
+  vars:
+    merge:
+      # Zabbix_server
+      zabbix_server:
+        enabled: true
+        src: "third_party"
+        version: "6.0"
+        server_name: "Zabbix server"
+        db_type: "MYSQL"
+        db_port: "3306"
+        db_host: "localhost"
+        db_name: "zabbix"
+        db_user: "zabbix"
+        db_password: "change_me"
+      # Zabbix_server -> install
+      zabbix_server_install:
+        enabled: true
+      # Zabbix_server -> config
+      zabbix_server_conf:
+        enabled: true
+
+      # MySQL
+      mysql:
+        enabled: true
+        src: "third_party"
+        version: "8.0"
+      # MySQL -> install
+      mysql_install:
+        enabled: true
+      # MySQL -> database
+      mysql_database:
+        zabbix_server:
+          enabled: true
+          remove_old: true
+      # MySQL -> user
+      mysql_user:
+        zabbix_server:
+          enabled: true
+      # MySQL -> sql
+      mysql_sql:
+        zabbix_server:
+          schema: true
+
+  tasks:
+    - name: include role darexsu.zabbix_server
+      include_role:
+        name: darexsu.zabbix_server
+```
+##### Install: zabbix-server (short version)
+
+```yaml
+- hosts: all
+  become: true
+
+  vars:
+    merge:
+      # Zabbix_server
+      zabbix_server:
+        enabled: true
+        version: "6.0"
+        server_name: "Zabbix server"
+        db_type: "MYSQL"
+        db_port: "3306"
+        db_host: "localhost"
+        db_name: "zabbix"
+        db_user: "zabbix"
+        db_password: "change_me"
+      # Zabbix_server -> install
+      zabbix_server_install:
+        enabled: true
+      # Zabbix_server -> config
+      zabbix_server_conf:
+        enabled: true
+
+  tasks:
+  - name: include role darexsu.zabbix_server
+    include_role: 
+      name: darexsu.zabbix_server
+
+```
+
+##### Configure: zabbix_server.conf (short version)
+```yaml
+- hosts: all
+  become: true
+
+  vars:
+    merge:
+      # Zabbix_server
+      zabbix_server:
+        enabled: true
+        server_name: "Zabbix server"
+        db_type: "MYSQL"
+        db_port: "3306"
+        db_host: "localhost"
+        db_name: "zabbix"
+        db_user: "zabbix"
+        db_password: "change_me"
+      # Zabbix_server -> config
+      zabbix_server_conf:
+        enabled: true
+        vars:
+          ListenPort: "10051"
+          LogFile: "/var/log/zabbix/zabbix_server.log"
+          LogFileSize: "0"
+          PidFile: "/var/run/zabbix/zabbix_server.pid"
+          SocketDir: "/var/run/zabbix"
+          DBHost: "{{ zabbix_server.db_host }}"
+          DBName: "{{ zabbix_server.db_name }}"
+          DBSchema: ""
+          DBUser: "{{ zabbix_server.db_user }}"
+          DBPassword: "{{ zabbix_server.db_password }}"
+          DBSocket: ""
+          DBPort: "{{ zabbix_server.db_port }}"
+          SNMPTrapperFile: "/var/log/snmptrap/snmptrap.log"
+          CacheUpdateFrequency: "60"
+          Timeout: "4"
+          AlertScriptsPath: "/usr/lib/zabbix/alertscripts"
+          ExternalScripts: "/usr/lib/zabbix/externalscripts"
+          FpingLocation: "/usr/bin/fping"
+          Fping6Location: "/usr/bin/fping6"
+          LogSlowQueries: "3000"
+        # ...
+ 
+  tasks:
+  - name: include role darexsu.zabbix_server
+    include_role: 
+      name: darexsu.zabbix_server
+
+```
+### Install and configure: Zabbix-server, MariaDB (full version)
+```yaml
+- hosts: all
   become: true
 
   vars:
@@ -171,7 +365,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       name: darexsu.zabbix_server
 
 ```
-##### Install and configure: Zabbix-server, MySQL
+##### Install and configure: Zabbix-server, MySQL (full version)
 ```yaml
 ---
 - name: Converge
@@ -240,7 +434,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           Fping6Location: "/usr/bin/fping6"
           LogSlowQueries: "3000"
 
-      # mysql
+      # MySQL
       mysql:
         enabled: true
         src: "third_party"
@@ -249,7 +443,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           state: "restarted"
           enabled: true
 
-      # mysql -> install
+      # MySQL -> install
       mysql_install:
         enabled: true
         packages:
@@ -259,7 +453,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           Debian: [gnupg2, python3, python3-pymysql]
           RedHat: [python3, python3-PyMySQL]
 
-      # mysql -> database
+      # MySQL -> database
       mysql_database:
         zabbix_server:
           enabled: true
@@ -275,7 +469,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           encoding: "utf8"
           collation: "utf8_bin"
 
-      # mysql -> user
+      # MySQL -> user
       mysql_user:
         zabbix_server:
           enabled: true
@@ -290,7 +484,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           privileges: 'zabbix.*:ALL'
           encrypted: false
 
-      # mysql -> sql
+      # MySQL -> sql
       mysql_sql:
         zabbix_server:
           schema: true
@@ -300,7 +494,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       include_role:
         name: darexsu.zabbix_server
 ```
-##### Install: zabbix-server
+##### Install: zabbix-server (full version)
 
 ```yaml
 - name: Converge
@@ -378,6 +572,22 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
 
   vars:
     merge:
+      # Zabbix_server
+      zabbix_server:
+        enabled: true
+        src: "third_party"
+        version: "6.0"
+        server_name: "Zabbix server"
+        db_type: "MYSQL"
+        db_port: "3306"
+        db_host: "localhost"
+        db_name: "zabbix"
+        db_user: "zabbix"
+        db_password: "change_me"
+        service:
+          state: "started"
+          enabled: true
+
       # Zabbix_server -> config
       zabbix_server_conf:
         enabled: true
