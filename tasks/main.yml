@@ -17,6 +17,10 @@
       merge: "{{ zabbix_server_default_vars | combine(merge, recursive=True)}}"
   when: merge is defined
 
+- name: zabbix_server role is disabled
+  meta: end_play
+  when: not zabbix_server.enabled
+
 - name: include mariadb install_and_config
   include_tasks: ./tasks/mariadb/install_and_config.yml
   when: mariadb.enabled
@@ -24,10 +28,6 @@
 - name: include mysql install_and_config
   include_tasks: ./tasks/mysql/install_and_config.yml
   when: mysql.enabled
-
-- name: zabbix_server role is disabled
-  meta: end_play
-  when: not zabbix_server.enabled
 
 - name: include zabbix_server install
   include_tasks: ./tasks/zabbix_server/install/zabbix_server__install_{{ ansible_os_family }}.yml
