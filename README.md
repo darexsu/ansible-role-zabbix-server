@@ -63,7 +63,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
                                       c: "3"
     
 ```
-### Install and configure: Zabbix-server, MariaDB (short version)
+##### Install and configure: Zabbix-server, MariaDB (short version)
 ```yaml
 - hosts: all
   become: true
@@ -252,7 +252,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       name: darexsu.zabbix_server
 
 ```
-### Install and configure: Zabbix-server, MariaDB (full version)
+##### Install and configure: Zabbix-server, MariaDB (full version)
 ```yaml
 - hosts: all
   become: true
