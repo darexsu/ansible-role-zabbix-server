@@ -321,7 +321,13 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
 
       # MariaDB -> install
       mariadb_install:
-        enabled: true
+        enabled: false
+        packages:
+          Debian: [mariadb-server]
+          RedHat: [mariadb-server]
+        dependencies:
+          Debian: [gnupg2, python3, python3-pymysql]
+          RedHat: [python3, python3-PyMySQL]
 
       # MariaDB -> database
       mariadb_database:
