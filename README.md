@@ -11,13 +11,13 @@
   - Playbooks (short version):
       - [install and configure: Zabbix-server, MariaDB, FirewallD](#install-and-configure-zabbix-server-mariadb-short-version)
       - [install and configure: Zabbix-server, MySQL, FirewallD](#install-and-configure-zabbix-server-mysql-short-version)
-      - [install: zabbix-server](#install-zabbix-server-short-version)
-      - [configure: zabbix_server.conf](#configure-zabbix_serverconf-short-version)  
+        - [install: zabbix-server](#install-zabbix-server-short-version)
+        - [configure: zabbix_server.conf](#configure-zabbix_serverconf-short-version)  
   - Playbooks (full version):
       - [install and configure: Zabbix-server, MariaDB, FirewallD](#install-and-configure-zabbix-server-mariadb-full-version)
       - [install and configure: Zabbix-server, MySQL, FirewallD](#install-and-configure-zabbix-server-mysql-full-version)
-      - [install: zabbix-server](#install-zabbix-server-full-version)
-      - [configure: zabbix_server.conf](#configure-zabbix_serverconf-full-version)
+        - [install: zabbix-server](#install-zabbix-server-full-version)
+        - [configure: zabbix_server.conf](#configure-zabbix_serverconf-full-version)
 
 ### Platforms
 
