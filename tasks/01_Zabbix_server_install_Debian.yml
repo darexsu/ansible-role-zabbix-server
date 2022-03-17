@@ -17,12 +17,11 @@
       ansible.builtin.apt_repository:
         repo: "{{ zabbix_server_const[ansible_os_family]['repo'] }}"
         state: present
-  when: zabbix_server.src == "third_party"
+  when: zabbix_server.src == "zabbix.com"
 
 - name: install zabbix packages.
   ansible.builtin.apt:
     name: "{{ item }}"
     state: present
     update_cache: true
-    install_recommends: no
   with_items: "{{ zabbix_server_install.packages.Debian }}"
