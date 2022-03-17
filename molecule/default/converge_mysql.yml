@@ -14,7 +14,7 @@
       # Zabbix_server
       zabbix_server:
         enabled: true
-        src: "zabbix_com"
+        repo: "zabbix"
         version: "6.0"
         server_name: "Zabbix server"
         db_type: "MYSQL"
@@ -139,65 +139,10 @@
           DBTLSCipher13: ""
           ListenBacklog: ""
 
-      # MariaDB
-      mariadb:
-        enabled: false
-        src: "third_party"
-        version: "10.5"
-        service:
-          state: "started"
-          enabled: true
-
-      # MariaDB -> install
-      mariadb_install:
-        enabled: false
-        packages:
-          Debian: [mariadb-server]
-          RedHat: [mariadb-server]
-        dependencies:
-          Debian: [gnupg2, python3, python3-pymysql]
-          RedHat: [python3, python3-PyMySQL]
-
-      # MariaDB -> database
-      mariadb_database:
-        zabbix_server:
-          remove_old: true
-          enabled: false
-          login_user: "root"
-          login_password: ""
-          login_host: "localhost"
-          login_port: "{{ zabbix_server.db_port }}"
-          login_unix_socket: "{{ mariadb_const[ansible_os_family]['socket'] }}"
-          name: "{{ zabbix_server.db_name }}"
-          state: "present"
-          target: ""
-          encoding: "utf8"
-          collation: "utf8_bin"
-
-      # MariaDB -> user
-      mariadb_user:
-        zabbix_server:
-          enabled: false
-          login_user: "root"
-          login_password: ""
-          login_host: "localhost"
-          login_port: "{{ zabbix_server.db_port }}"
-          login_unix_socket: "{{ mariadb_const[ansible_os_family]['socket'] }}"
-          name: "{{ zabbix_server.db_user }}"
-          password: "{{ zabbix_server.db_password }}"
-          state: "present"
-          privileges: 'zabbix.*:ALL'
-          encrypted: false
-
-      # MariaDB -> sql
-      mariadb_sql:
-        zabbix_server:
-          schema: true
-
       # MySQL
       mysql:
         enabled: true
-        src: "third_party"
+        repo: "mysql"
         version: "8.0"
         service:
           state: "started"

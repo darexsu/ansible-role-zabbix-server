@@ -21,7 +21,7 @@
 
 ### Platforms
 
-|  Testing         |  Zabbix repo       |
+|  Testing         |  repo: zabbix      |
 | :--------------: | :----------------: |
 | Debian 11        |  Zabbix  6.0 lts   |
 | Debian 10        |  Zabbix  6.0 lts   |
@@ -90,7 +90,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       # MariaDB
       mariadb:
         enabled: true
-        src: "third_party"
+        repo: "mariadb"
         version: "10.5"
       # MariaDB -> install
       mariadb_install:
@@ -137,7 +137,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       # Zabbix_server
       zabbix_server:
         enabled: true
-        src: "third_party"
+        repo: "zabbix"
         version: "6.0"
         server_name: "Zabbix server"
         db_type: "MYSQL"
@@ -156,7 +156,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
       # MySQL
       mysql:
         enabled: true
-        src: "third_party"
+        repo: "mysql"
         version: "8.0"
       # MySQL -> install
       mysql_install:
@@ -282,7 +282,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # Zabbix_server
     zabbix_server:
       enabled: true
-      src: "third_party"
+      repo: "zabbix"
       version: "6.0"
       server_name: "Zabbix server"
       db_type: "MYSQL"
@@ -334,7 +334,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # MariaDB
     mariadb:
       enabled: true
-      src: "third_party"
+      repo: "mariadb"
       version: "10.5"
     # MariaDB -> install
     mariadb_install:
@@ -425,7 +425,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # Zabbix_server
     zabbix_server:
       enabled: true
-      src: "third_party"
+      repo: "zabbix"
       version: "6.0"
       server_name: "Zabbix server"
       db_type: "MYSQL"
@@ -477,7 +477,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # MySQL
     mysql:
       enabled: true
-      src: "third_party"
+      repo: "mysql"
       version: "8.0"
       service:
         state: "restarted"
@@ -564,7 +564,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # Zabbix_server
     zabbix_server:
       enabled: true
-      src: "third_party"
+      repo: "zabbix"
       version: "6.0"
       server_name: "Zabbix server"
       db_type: "MYSQL"
@@ -630,7 +630,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # Zabbix_server
     zabbix_server:
       enabled: true
-      src: "third_party"
+      repo: "zabbix"
       version: "6.0"
       server_name: "Zabbix server"
       db_type: "MYSQL"

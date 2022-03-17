@@ -10,7 +10,7 @@
 # Zabbix_server
 zabbix_server:
   enabled: false
-  src: "zabbix_com"
+  repo: "zabbix"
   version: "6.0"
   server_name: "Zabbix server"
   db_type: "MYSQL"
@@ -149,7 +149,7 @@ zabbix_server_const:
 # MariaDB
 mariadb:
   enabled: false
-  src: "third_party"
+  repo: "mariadb"
   version: "10.5"
   service:
     state: "started"
@@ -221,7 +221,7 @@ mariadb_const:
 # MySQL
 mysql:
   enabled: false
-  src: "third_party"
+  repo: "mysql"
   version: "8.0"
   service:
     state: "started"

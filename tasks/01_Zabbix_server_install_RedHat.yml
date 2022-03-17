@@ -17,7 +17,7 @@
       ansible.builtin.package:
         name: "{{ zabbix_server_const[ansible_os_family]['repo'] }}"
         state: present
-  when: zabbix_server.src == "zabbix_com"
+  when: zabbix_server.src == "zabbix"
 
 - name: install zabbix packages.
   ansible.builtin.package:
