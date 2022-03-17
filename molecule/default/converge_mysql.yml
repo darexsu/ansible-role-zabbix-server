@@ -43,10 +43,13 @@
         file: "zabbix_server.conf"
         src: "zabbix_server_conf.j2"
         backup: false
-        vars:
+        data:
           ListenPort: "10051"
+          SourceIP: ""
+          LogType: ""
           LogFile: "/var/log/zabbix/zabbix_server.log"
           LogFileSize: "0"
+          DebugLevel: ""
           PidFile: "/var/run/zabbix/zabbix_server.pid"
           SocketDir: "/var/run/zabbix"
           DBHost: "{{ zabbix_server.db_host }}"
@@ -56,25 +59,151 @@
           DBPassword: "{{ zabbix_server.db_password }}"
           DBSocket: ""
           DBPort: "{{ zabbix_server.db_port }}"
+          HistoryStorageURL: ""
+          HistoryStorageTypes: ""
+          HistoryStorageDateIndex: ""
+          ExportDir: ""
+          ExportFileSize: ""
+          ExportType: ""
+          StartPollers: ""
+          StartIPMIPollers: ""
+          StartPreprocessors: ""
+          StartPollersUnreachable: ""
+          StartTrappers: ""
+          StartPingers: ""
+          StartDiscoverers: ""
+          StartHTTPPollers: ""
+          StartTimers: ""
+          StartEscalators: ""
+          StartAlerters: ""
+          JavaGateway: ""
+          JavaGatewayPort: ""
+          StartJavaPollers: ""
+          StartVMwareCollectors: ""
+          VMwareFrequency: ""
+          VMwarePerfFrequency: ""
+          VMwareCacheSize: ""
+          VMwareTimeout: ""
           SNMPTrapperFile: "/var/log/snmptrap/snmptrap.log"
+          StartSNMPTrapper: ""
+          ListenIP: ""
+          HousekeepingFrequency: ""
+          MaxHousekeeperDelete: ""
+          CacheSize: ""
           CacheUpdateFrequency: "60"
+          StartDBSyncers: ""
+          HistoryCacheSize: ""
+          HistoryIndexCacheSize: ""
+          TrendCacheSize: ""
+          ValueCacheSize: ""
           Timeout: "4"
+          TrapperTimeout: ""
+          UnreachablePeriod: ""
+          UnavailableDelay: ""
+          UnreachableDelay: ""
           AlertScriptsPath: "/usr/lib/zabbix/alertscripts"
           ExternalScripts: "/usr/lib/zabbix/externalscripts"
           FpingLocation: "/usr/bin/fping"
           Fping6Location: "/usr/bin/fping6"
+          SSHKeyLocation: ""
           LogSlowQueries: "3000"
+          TmpDir: ""
+          StartProxyPollers: ""
+          ProxyConfigFrequency: ""
+          ProxyDataFrequency: ""
+          StartLLDProcessors: ""
+          AllowRoot: ""
+          User: ""
+          Include: ""
+          SSLCertLocation: ""
+          SSLKeyLocation: ""
+          SSLCALocation: ""
+          StatsAllowedIP: "127.0.0.1"
+          LoadModulePath: ""
+          LoadModule: ""
+          TLSCAFile: ""
+          TLSCRLFile: ""
+          TLSCertFile: ""
+          TLSKeyFile: ""
+          TLSCipherCert13: ""
+          TLSCipherCert: ""
+          TLSCipherPSK13: ""
+          TLSCipherPSK: ""
+          TLSCipherAll13: ""
+          TLSCipherAll: ""
+          DBTLSConnect: ""
+          DBTLSCAFile: ""
+          DBTLSCertFile: ""
+          DBTLSKeyFile: ""
+          DBTLSCipher: ""
+          DBTLSCipher13: ""
+          ListenBacklog: ""
 
-      # mysql
+      # MariaDB
+      mariadb:
+        enabled: false
+        src: "third_party"
+        version: "10.5"
+        service:
+          state: "started"
+          enabled: true
+
+      # MariaDB -> install
+      mariadb_install:
+        enabled: false
+        packages:
+          Debian: [mariadb-server]
+          RedHat: [mariadb-server]
+        dependencies:
+          Debian: [gnupg2, python3, python3-pymysql]
+          RedHat: [python3, python3-PyMySQL]
+
+      # MariaDB -> database
+      mariadb_database:
+        zabbix_server:
+          remove_old: true
+          enabled: false
+          login_user: "root"
+          login_password: ""
+          login_host: "localhost"
+          login_port: "{{ zabbix_server.db_port }}"
+          login_unix_socket: "{{ mariadb_const[ansible_os_family]['socket'] }}"
+          name: "{{ zabbix_server.db_name }}"
+          state: "present"
+          target: ""
+          encoding: "utf8"
+          collation: "utf8_bin"
+
+      # MariaDB -> user
+      mariadb_user:
+        zabbix_server:
+          enabled: false
+          login_user: "root"
+          login_password: ""
+          login_host: "localhost"
+          login_port: "{{ zabbix_server.db_port }}"
+          login_unix_socket: "{{ mariadb_const[ansible_os_family]['socket'] }}"
+          name: "{{ zabbix_server.db_user }}"
+          password: "{{ zabbix_server.db_password }}"
+          state: "present"
+          privileges: 'zabbix.*:ALL'
+          encrypted: false
+
+      # MariaDB -> sql
+      mariadb_sql:
+        zabbix_server:
+          schema: true
+
+      # MySQL
       mysql:
         enabled: true
         src: "third_party"
         version: "8.0"
         service:
-          state: "restarted"
+          state: "started"
           enabled: true
 
-      # mysql -> install
+      # MySQL -> install
       mysql_install:
         enabled: true
         packages:
@@ -84,7 +213,7 @@
           Debian: [gnupg2, python3, python3-pymysql]
           RedHat: [python3, python3-PyMySQL]
 
-      # mysql -> database
+      # MySQL -> database
       mysql_database:
         zabbix_server:
           enabled: true
@@ -100,7 +229,7 @@
           encoding: "utf8"
           collation: "utf8_bin"
 
-      # mysql -> user
+      # MySQL -> user
       mysql_user:
         zabbix_server:
           enabled: true
@@ -115,7 +244,7 @@
           privileges: 'zabbix.*:ALL'
           encrypted: false
 
-      # mysql -> sql
+      # MySQL -> sql
       mysql_sql:
         zabbix_server:
           schema: true
@@ -123,6 +252,7 @@
       # FirewallD
       firewalld:
         enabled: true
+
       # FirewallD -> rules
       firewalld_rules:
         zabbix_port_10050:

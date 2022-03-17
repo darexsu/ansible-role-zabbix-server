@@ -1,4 +1,4 @@
-{% for key, value in zabbix_server_conf.vars.items() -%}  
+{% for key, value in zabbix_server_conf.data.items() -%}  
 {% if value|length > 0  %}
 {{ key }}={{ value }}
 {% endif %}

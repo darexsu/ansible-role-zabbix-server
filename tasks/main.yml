@@ -1,61 +1,63 @@
 ---
-- name: merge dictionaries
+- name: "Merge dictionaries"
   block:
-    - name: register default vars
+    - name: "Register default vars"
       include_vars:
         file: ../../darexsu.zabbix_server/defaults/main.yml
         name: zabbix_server_default_vars
 
-    - name: merge default and new dictionaries
+    - name: "Merge default and new dictionaries"
       set_fact:
         "{{ item.key }}": "{{ zabbix_server_default_vars[item.key] | combine(merge[item.key], recursive=True)}}"
       when: zabbix_server_default_vars[item.key] is defined
       with_dict: "{{ merge }}"
 
-    - name: combine defaults vars with merge dictionary
+    - name: "Combine defaults vars with merge dictionary"
       set_fact:
         merge: "{{ zabbix_server_default_vars | combine(merge, recursive=True)}}"
   when: merge is defined
 
-- name: zabbix_server role is disabled
+- name: "Zabbix_server role is disabled"
   meta: end_play
   when: not zabbix_server.enabled
 
-- name: include mariadb install_and_config
-  include_tasks: ./tasks/mariadb/install_and_config.yml
+- name: "Include role -> darexsu.mariadb"
+  include_role:
+    name: darexsu.mariadb
   when: mariadb.enabled
 
-- name: include mysql install_and_config
-  include_tasks: ./tasks/mysql/install_and_config.yml
+- name: "include role -> darexsu.mysql"
+  include_role:
+    name: darexsu.mysql
   when: mysql.enabled
 
-- name: include zabbix_server install
-  include_tasks: ./tasks/zabbix_server/install/zabbix_server__install_{{ ansible_os_family }}.yml
+- name: "-> 01_Zabbix_server_install_{{ ansible_os_family }}.yml"
+  include_tasks: ./tasks/01_Zabbix_server_install_{{ ansible_os_family }}.yml
   when: zabbix_server_install.enabled
 
-- name: gather the package facts
-  ansible.builtin.package_facts:
-    manager: auto
+- name: "Service facts"
+  ansible.builtin.service_facts:
 
-- name: include zabbix_server config
-  include_tasks: ./tasks/zabbix_server/config/zabbix_server__conf.yml
-  when: zabbix_server_install['packages'][ansible_os_family][0] in ansible_facts.packages and zabbix_server_conf.enabled
+- name: "-> 02_Zabbix_server_config.yml"
+  include_tasks: ./tasks/02_Zabbix_server_config.yml
+  when: ansible_facts.services is search("zabbix-server") and zabbix_server_conf.enabled
 
-- name: include mariadb tasks
-  include_tasks: ./tasks/mariadb/tasks.yml
+- name: "-> 03_MariaDB_tasks.yml"
+  include_tasks: ./tasks/03_MariaDB_tasks.yml
   when: mariadb.enabled
 
-- name: include mysql tasks
-  include_tasks: ./tasks/mysql/tasks.yml
+- name: "-> 03_MySQL_tasks.yml"
+  include_tasks: ./tasks/03_MySQL_tasks.yml
   when: mysql.enabled
 
-- name: include firewalld tasks
-  include_tasks: ./tasks/firewalld/zabbix_server__firewalld.yml
+- name: "include role -> darexsu.firewalld"
+  include_role:
+    name: darexsu.firewalld
   when: firewalld.enabled
 
-- name: zabbix-server service
+- name: "Ensure Zabbix-server {{ zabbix_server.service.state }}"
   ansible.builtin.service:
     name: zabbix-server
     state: "{{ zabbix_server.service.state }}"
     enabled: "{{ zabbix_server.service.enabled }}"
-  when: zabbix_server_install['packages'][ansible_os_family][0] in ansible_facts.packages
+  when: ansible_facts.services is search("zabbix-server")

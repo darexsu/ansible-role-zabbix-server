@@ -39,7 +39,7 @@ zabbix_server_conf:
   file: "zabbix_server.conf"
   src: "zabbix_server_conf.j2"
   backup: false
-  vars:
+  data:
     ListenPort: "10051"
     SourceIP: ""
     LogType: ""
@@ -298,7 +298,7 @@ mysql_const:
 
 # FirewallD
 firewalld:
-  enabled: true
+  enabled: false
 
 # FirewallD -> rules
 firewalld_rules:

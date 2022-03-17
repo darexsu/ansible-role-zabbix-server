@@ -1,6 +1,6 @@
 ---
-- name: darexsu.mariadb
+- role: darexsu.mariadb
 
-- name: darexsu.mysql
+- role: darexsu.mysql
 
-- name: darexsu.firewalld
+- role: darexsu.firewalld
