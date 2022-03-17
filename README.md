@@ -9,10 +9,10 @@
       - [relative](#relative)
       - [merge behaviour](#merge-behaviour)
   - Playbooks (merge version):
-      - [install and configure: Zabbix-server, MariaDB, FirewallD](#install-and-configure-zabbix-server-mariadb-short-version)
-      - [install and configure: Zabbix-server, MySQL, FirewallD](#install-and-configure-zabbix-server-mysql-short-version)
-        - [install: zabbix-server](#install-zabbix-server-short-version)
-        - [configure: zabbix_server.conf](#configure-zabbix_serverconf-short-version)  
+      - [install and configure: Zabbix-server, MariaDB, FirewallD](#install-and-configure-zabbix-server-mariadb-merge-version)
+      - [install and configure: Zabbix-server, MySQL, FirewallD](#install-and-configure-zabbix-server-mysql-merge-version)
+        - [install: zabbix-server](#install-zabbix-server-merge-version)
+        - [configure: zabbix_server.conf](#configure-zabbix_serverconf-merge-version)  
   - Playbooks (full version):
       - [install and configure: Zabbix-server, MariaDB, FirewallD](#install-and-configure-zabbix-server-mariadb-full-version)
       - [install and configure: Zabbix-server, MySQL, FirewallD](#install-and-configure-zabbix-server-mysql-full-version)
