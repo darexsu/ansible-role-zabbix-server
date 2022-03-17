@@ -14,7 +14,7 @@
       # Zabbix_server
       zabbix_server:
         enabled: true
-        src: "third_party"
+        src: "zabbix_com"
         version: "6.0"
         server_name: "Zabbix server"
         db_type: "MYSQL"
