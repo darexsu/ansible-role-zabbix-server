@@ -37,6 +37,7 @@ ansible-galaxy install darexsu.zabbix_server --force
 ```
 ### Requirements
 collections: ansible.posix, community.mysql
+
 roles: [MariaDB](https://github.com/darexsu/ansible-role-mariadb), [MySQL](https://github.com/darexsu/ansible-role-mysql), [FirewallD](https://github.com/darexsu/ansible-role-firewalld) (will automatically be installed)
 
 ### Relative
