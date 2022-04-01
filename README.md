@@ -9,13 +9,13 @@
       - [relative](#relative)
       - [merge behaviour](#merge-behaviour)
   - Playbooks (merge version):
-      - [install and configure: Zabbix-server, MariaDB, FirewallD](#install-and-configure-zabbix-server-mariadb-merge-version)
-      - [install and configure: Zabbix-server, MySQL, FirewallD](#install-and-configure-zabbix-server-mysql-merge-version)
+      - [install and configure: Zabbix-server v6.0, MariaDB v10.5, FirewallD](#install-and-configure-zabbix-server-mariadb-merge-version)
+      - [install and configure: Zabbix-server v6.0, MySQL v8.0, FirewallD](#install-and-configure-zabbix-server-mysql-merge-version)
         - [install: zabbix-server](#install-zabbix-server-merge-version)
         - [configure: zabbix_server.conf](#configure-zabbix_serverconf-merge-version)  
   - Playbooks (full version):
-      - [install and configure: Zabbix-server, MariaDB, FirewallD](#install-and-configure-zabbix-server-mariadb-full-version)
-      - [install and configure: Zabbix-server, MySQL, FirewallD](#install-and-configure-zabbix-server-mysql-full-version)
+      - [install and configure: Zabbix-server v6.0, MariaDB v10.5, FirewallD](#install-and-configure-zabbix-server-mariadb-full-version)
+      - [install and configure: Zabbix-server v6.0, MySQL v8.0, FirewallD](#install-and-configure-zabbix-server-mysql-full-version)
         - [install: zabbix-server](#install-zabbix-server-full-version)
         - [configure: zabbix_server.conf](#configure-zabbix_serverconf-full-version)
 
@@ -297,12 +297,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # Zabbix_server -> install
     zabbix_server_install:
       enabled: true
-      packages:
-        Debian: [zabbix-server-mysql, zabbix-agent, zabbix-sql-scripts]
-        RedHat: [zabbix-server-mysql, zabbix-agent, zabbix-sql-scripts]
-      dependencies:
-        Debian: [apt-transport-https, ca-certificates, gnupg2, lsb-release]
-        RedHat: []
     # Zabbix_server -> config
     zabbix_server_conf:
       enabled: true
@@ -339,12 +333,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # MariaDB -> install
     mariadb_install:
       enabled: false
-      packages:
-        Debian: [mariadb-server]
-        RedHat: [mariadb-server]
-      dependencies:
-        Debian: [gnupg2, python3, python3-pymysql]
-        RedHat: [python3, python3-PyMySQL]
     # MariaDB -> database
     mariadb_database:
       zabbix_server:
@@ -440,12 +428,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # Zabbix_server -> install
     zabbix_server_install:
       enabled: true
-      packages:
-        Debian: [zabbix-server-mysql, zabbix-agent, zabbix-sql-scripts]
-        RedHat: [zabbix-server-mysql, zabbix-agent, zabbix-sql-scripts]
-      dependencies:
-        Debian: [apt-transport-https, ca-certificates, gnupg2, lsb-release]
-        RedHat: []
     # Zabbix_server -> config
     zabbix_server_conf:
       enabled: true
@@ -485,12 +467,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # MySQL -> install
     mysql_install:
       enabled: true
-      packages:
-        Debian: [mysql-server]
-        RedHat: [mysql-server]
-      dependencies:
-        Debian: [gnupg2, python3, python3-pymysql]
-        RedHat: [python3, python3-PyMySQL]
     # MySQL -> database
     mysql_database:
       zabbix_server:
@@ -579,12 +555,6 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
     # Zabbix_server -> install
     zabbix_server_install:
       enabled: true
-      packages:
-        Debian: [zabbix-server-mysql, zabbix-agent, zabbix-sql-scripts]
-        RedHat: [zabbix-server-mysql, zabbix-agent, zabbix-sql-scripts]
-      dependencies:
-        Debian: [apt-transport-https, ca-certificates, gnupg2, lsb-release]
-        RedHat: []
     # Zabbix_server -> config
     zabbix_server_conf:
       enabled: true
