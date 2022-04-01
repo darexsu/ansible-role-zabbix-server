@@ -33,10 +33,12 @@
 ### Install
 ```
 ansible-galaxy install darexsu.zabbix_server --force
+
 ```
 ### Requirements
+collections: [ansible.posix](https://docs.ansible.com/ansible/latest/collections/ansible/posix/index.html), [community.mysql](https://docs.ansible.com/ansible/latest/collections/community/mysql/index.html#plugins-in-community-mysql)
 
-dependencies will automatically be installed: [MariaDB](https://github.com/darexsu/ansible-role-mariadb), [MySQL](https://github.com/darexsu/ansible-role-mysql), [FirewallD](https://github.com/darexsu/ansible-role-firewalld)
+roles: [MariaDB](https://github.com/darexsu/ansible-role-mariadb), [MySQL](https://github.com/darexsu/ansible-role-mysql), [FirewallD](https://github.com/darexsu/ansible-role-firewalld) (will automatically be installed)
 
 ### Relative
 
@@ -399,15 +401,8 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
 ##### Install and configure: Zabbix-server, MySQL (full version)
 ```yaml
 ---
-- name: Converge
-  hosts: all
+- hosts: all
   become: true
-
-  pre_tasks:
-  - name: Unnessessary command
-    ansible.builtin.shell:
-      cmd: "{{ lookup('env', 'ANSIBLE_COMMAND') }}"
-    when: lookup('env', 'ANSIBLE_COMMAND') | length > 0
 
   vars:
     # Zabbix_server
