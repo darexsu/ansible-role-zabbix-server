@@ -413,15 +413,8 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
 ##### Install and configure: Zabbix-server, MySQL (full version)
 ```yaml
 ---
-- name: Converge
-  hosts: all
+- hosts: all
   become: true
-
-  pre_tasks:
-  - name: Unnessessary command
-    ansible.builtin.shell:
-      cmd: "{{ lookup('env', 'ANSIBLE_COMMAND') }}"
-    when: lookup('env', 'ANSIBLE_COMMAND') | length > 0
 
   vars:
     # Zabbix_server
