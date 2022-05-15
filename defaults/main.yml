@@ -300,6 +300,9 @@ mysql_const:
 # FirewallD
 firewalld:
   enabled: false
+  service:
+    enabled: true
+    state: "started"
 
 # FirewallD -> rules
 firewalld_rules:
