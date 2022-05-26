@@ -123,9 +123,9 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
           enabled: true
 
   tasks:
-  - name: include role darexsu.zabbix_server
-    include_role: 
-      name: darexsu.zabbix_server
+    - name: include role darexsu.zabbix_server
+      include_role: 
+        name: darexsu.zabbix_server
 
 ```
 ##### Install and configure: Zabbix-server, MySQL (merge version)
